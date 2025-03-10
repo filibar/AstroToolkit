@@ -51,6 +51,9 @@ namespace AstroToolkitWeb.Models
         // Transparency rated 1-10 (1 = poor, 10 = excellent)
         [Range(1, 10)]
         public int? TransparencyIndex { get; set; }
+        
+        // Icon code for weather condition visualization
+        public string? IconCode { get; set; }
 
         // Overall rating for astrophotography (1-10)
         [Range(1, 10)]

@@ -273,5 +273,16 @@ namespace AstroToolkitWeb.Services
                 return "overcast";
             }
         }
+        
+        /// <summary>
+        /// Ensures weather data has a valid icon code
+        /// </summary>
+        public void EnsureWeatherIconCode(WeatherData weatherData)
+        {
+            if (string.IsNullOrEmpty(weatherData.IconCode))
+            {
+                weatherData.IconCode = GetWeatherIconCode(weatherData.CloudCoverage);
+            }
+        }
     }
 }
