@@ -32,8 +32,8 @@ namespace AstroToolkitWeb.Models
         public string GetIconPath()
         {
             return !string.IsNullOrEmpty(IconCode)
-                ? $"images/weather/{IconCode}.svg"
-                : "images/weather/placeholder.svg";
+                ? $"_content/AstroToolkitWeb/images/weather/{IconCode}.svg"
+                : "_content/AstroToolkitWeb/images/weather/placeholder.svg";
         }
     }
 }

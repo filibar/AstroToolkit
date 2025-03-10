@@ -21,9 +21,9 @@
 {
     <div>
         <WeatherIcon IconCode="@forecast.IconCode" />
-        <p>Time: @forecast.Time</p>
-        <p>Temperature: @forecast.Temperature</p>
-        <p>Condition: @forecast.Condition</p>
+        <div class="forecast-time">@forecast.Date.ToString("HH:mm")</div>
+        <div class="forecast-temp">@forecast.Temperature°C</div>
+        <div class="forecast-condition">@forecast.Description</div>
     </div>
 }
 
@@ -33,8 +33,8 @@
     private WeatherData weatherData = new WeatherData { IconCode = "partly-cloudy", Temperature = 25, Condition = "Partly Cloudy" };
     private List<Forecast> forecasts = new List<Forecast>()
     {
-        new Forecast { IconCode = "cloudy", Time = "10:00 AM", Temperature = 22, Condition = "Cloudy"},
-        new Forecast { IconCode = "clear", Time = "2:00 PM", Temperature = 28, Condition = "Clear"}
+        new Forecast { IconCode = "cloudy", Date = DateTime.Now.AddHours(10), Temperature = 22, Description = "Cloudy"},
+        new Forecast { IconCode = "clear", Date = DateTime.Now.AddHours(14), Temperature = 28, Description = "Clear"}
     };
 }
 
@@ -65,7 +65,7 @@ public class WeatherData
 public class Forecast
 {
     public string IconCode { get; set; }
-    public string Time { get; set; }
+    public DateTime Date { get; set; }
     public int Temperature { get; set; }
-    public string Condition { get; set; }
+    public string Description { get; set; }
 }

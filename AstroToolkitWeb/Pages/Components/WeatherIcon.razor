@@ -1,17 +1,21 @@
-@namespace AstroToolkitWeb.Pages.Components
 
-<div class="weather-icon">
-    @if (string.IsNullOrEmpty(IconCode))
-    {
-        <img src="images/weather/placeholder.svg" alt="Weather" class="weather-img" />
-    }
-    else
-    {
-        <img src="@($"images/weather/{IconCode.ToLower().Replace("_", "-")}.svg")" alt="Weather" class="weather-img" />
-    }
-</div>
+@if (!string.IsNullOrEmpty(IconCode))
+{
+    <img src="@GetIconPath()" alt="@IconCode" class="weather-icon" style="@Style" />
+}
 
 @code {
     [Parameter]
     public string? IconCode { get; set; }
+
+    [Parameter]
+    public string Style { get; set; } = "width: 32px; height: 32px;";
+
+    private string GetIconPath()
+    {
+        if (string.IsNullOrEmpty(IconCode))
+            return "_content/AstroToolkitWeb/images/weather/placeholder.svg";
+
+        return $"_content/AstroToolkitWeb/images/weather/{IconCode}.svg";
+    }
 }
