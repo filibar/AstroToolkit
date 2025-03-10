@@ -237,7 +237,25 @@
 }
 
 @section Scripts {
-    <script src="https://maps.googleapis.com/maps/api/js?key=@Model.MapsApiKey&callback=initMap" async defer></script>
+    @if (!string.IsNullOrEmpty(Model.MapsApiKey) && Model.MapsApiKey != "YOUR_API_KEY") 
+    {
+        <script src="https://maps.googleapis.com/maps/api/js?key=@Model.MapsApiKey&callback=initMap" async defer></script>
+    }
+    else 
+    {
+        <div class="alert alert-warning mt-3">
+            <h4 class="alert-heading">Google Maps API Key Required</h4>
+            <p>To use the map functionality, you need to configure a Google Maps API key.</p>
+        </div>
+        <script>
+            // Fallback function when no API key is provided
+            function initMap() {
+                console.log("Map initialization skipped - no API key provided");
+                document.getElementById('map').innerHTML = '<div class="d-flex justify-content-center align-items-center h-100"><p class="text-center">Map unavailable - API key required.<br>Please configure a Google Maps API key in the application settings.</p></div>';
+            }
+            window.onload = initMap;
+        </script>
+    }
     <script>
         let map;
         let lightPollutionLayer;
