@@ -1,5 +1,9 @@
 @page "/"
 @using AstroToolkitWeb.Pages.Components
+@using AstroToolkitWeb.Models
+@using AstroToolkitWeb.Services
+
+<PageTitle>Astro Toolkit</PageTitle>
 
 <h1>Current Conditions</h1>
 
@@ -44,7 +48,9 @@
 
     private string GetIconPath(string iconCode)
     {
-        return $"/images/{iconCode}.svg"; // Assumed image location
+        //Improved logic to handle different icon names
+        string fileName = iconCode.Replace("-", "_"); //Simple replacement, adjust as needed
+        return $"/images/moon/{fileName}.svg";
     }
 }
 

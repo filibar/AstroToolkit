@@ -1,0 +1,18 @@
+
+@namespace AstroToolkitWeb.Pages.Components
+
+<div class="moon-phase-icon">
+    @if (string.IsNullOrEmpty(PhaseIconCode))
+    {
+        <img src="images/moon/placeholder.svg" alt="Moon Phase" class="moon-icon" />
+    }
+    else
+    {
+        <img src="@($"images/moon/{PhaseIconCode.ToLower().Replace("_", "-")}.svg")" alt="Moon Phase" class="moon-icon" />
+    }
+</div>
+
+@code {
+    [Parameter]
+    public string? PhaseIconCode { get; set; }
+}
