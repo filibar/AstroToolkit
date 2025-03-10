@@ -2,17 +2,70 @@
 @namespace AstroToolkitWeb.Pages.Components
 
 <div class="moon-phase-icon">
-    @if (string.IsNullOrEmpty(PhaseIconCode))
-    {
-        <img src="images/moon/placeholder.svg" alt="Moon Phase" class="moon-icon" />
-    }
-    else
-    {
-        <img src="@($"images/moon/{PhaseIconCode.ToLower().Replace("_", "-")}.svg")" alt="Moon Phase" class="moon-icon" />
-    }
+    <img src="@GetMoonPhaseIconPath()" alt="@PhaseName" title="@PhaseName" width="@Width" height="@Height" />
 </div>
 
 @code {
     [Parameter]
-    public string? PhaseIconCode { get; set; }
+    public string? PhaseName { get; set; }
+
+    [Parameter]
+    public double Illumination { get; set; }
+
+    [Parameter]
+    public int PhaseType { get; set; }
+
+    [Parameter]
+    public int Width { get; set; } = 50;
+
+    [Parameter]
+    public int Height { get; set; } = 50;
+
+    private string GetMoonPhaseIconPath()
+    {
+        string iconPath;
+
+        switch (PhaseType)
+        {
+            case 0:
+                iconPath = "images/moon/new-moon.svg";
+                break;
+            case 1:
+                iconPath = "images/moon/waxing-crescent.svg";
+                break;
+            case 2:
+                iconPath = "images/moon/first-quarter.svg";
+                break;
+            case 3:
+                iconPath = "images/moon/waxing-gibbous.svg";
+                break;
+            case 4:
+                iconPath = "images/moon/full-moon.svg";
+                break;
+            case 5:
+                iconPath = "images/moon/waning-gibbous.svg";
+                break;
+            case 6:
+                iconPath = "images/moon/last-quarter.svg";
+                break;
+            case 7:
+                iconPath = "images/moon/waning-crescent.svg";
+                break;
+            default:
+                iconPath = "images/moon/placeholder.svg";
+                break;
+        }
+
+        return iconPath;
+    }
 }
+
+<style>
+    .moon-phase-icon {
+        display: inline-block;
+    }
+    
+    .moon-phase-icon img {
+        object-fit: contain;
+    }
+</style>
