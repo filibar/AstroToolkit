@@ -24,7 +24,7 @@ namespace AstroToolkitWeb.Services
             _configuration = configuration;
             _dbService = dbService;
             _astroCalculationService = astroCalculationService;
-            
+
             // Get the API key from configuration
             _apiKey = _configuration["WeatherApi:ApiKey"];
         }
@@ -41,7 +41,7 @@ namespace AstroToolkitWeb.Services
 
                 // Check if we already have weather data for this location and date in the database
                 var existingData = await _dbService.GetWeatherDataForLocationAsync(latitude, longitude, date.Value);
-                
+
                 if (existingData != null)
                 {
                     // If the data is recent (less than 3 hours old), return it
@@ -62,13 +62,17 @@ namespace AstroToolkitWeb.Services
                 // Call weather API (placeholder for now - would need to be replaced with actual API call)
                 // var weatherApiUrl = $"https://api.example.com/weather?lat={latitude}&lon={longitude}&appid={_apiKey}";
                 // var response = await _httpClient.GetFromJsonAsync<WeatherApiResponse>(weatherApiUrl);
-                
+
                 // For demo purposes, use simulated data
                 var weatherData = CreateSimulatedWeatherData(latitude, longitude, date.Value);
-                
+
+                //Ensure IconCode is set
+                EnsureWeatherIconCode(weatherData);
+
+
                 // Store in database
                 await _dbService.AddWeatherDataAsync(weatherData);
-                
+
                 return weatherData;
             }
             catch (Exception ex)
@@ -86,7 +90,7 @@ namespace AstroToolkitWeb.Services
             try
             {
                 var weatherData = await GetWeatherDataAsync(latitude, longitude, date);
-                
+
                 if (weatherData == null)
                 {
                     return 0;  // No data available
@@ -94,32 +98,32 @@ namespace AstroToolkitWeb.Services
 
                 // Calculate astronomy viewing score based on various factors
                 // This is a simple algorithm for demonstration purposes
-                
+
                 // Cloud cover has the biggest impact (0-60 points)
                 int cloudScore = 60 - (int)(weatherData.CloudCoverage * 0.6);
-                
+
                 // Humidity affects visibility (0-15 points)
                 int humidityScore = 15 - (int)(weatherData.Humidity * 0.15);
-                
+
                 // Temperature stability is important (up to 10 points)
                 // Moderate temps are better (not too hot or cold)
                 double tempCelsius = weatherData.Temperature ?? 15;
                 int tempScore = tempCelsius < 0 ? 5 : (tempCelsius > 30 ? 5 : 10);
-                
+
                 // Wind affects image stability (0-15 points)
                 double windSpeed = weatherData.WindSpeed ?? 0;
                 int windScore = windSpeed > 20 ? 0 : (windSpeed > 10 ? 5 : 15);
-                
+
                 // Calculate total score (0-100)
                 int totalScore = cloudScore + humidityScore + tempScore + windScore;
-                
+
                 // Ensure score is between 0 and 100
                 totalScore = Math.Max(0, Math.Min(100, totalScore));
-                
+
                 // Update the weather data with the astronomy viewing score
                 weatherData.AstronomyViewingScore = totalScore;
                 await _dbService.AddWeatherDataAsync(weatherData);
-                
+
                 return totalScore;
             }
             catch (Exception ex)
@@ -139,17 +143,17 @@ namespace AstroToolkitWeb.Services
                 (int)(latitude * 1000) + 
                 (int)(longitude * 1000) + 
                 date.Day + date.Month + date.Year);
-            
+
             // Calculate moon phase
             var moonPhase = _astroCalculationService.CalculateMoonPhase(date);
-            
+
             // Base temperature on latitude (colder near poles, warmer near equator)
             double baseTemp = 15 - Math.Abs(latitude) * 0.4;
-            
+
             // Add seasonal variation (northern/southern hemisphere)
             int month = date.Month;
             bool northernHemisphere = latitude >= 0;
-            
+
             // For northern hemisphere: summer in Jun-Aug, winter in Dec-Feb
             // For southern hemisphere: summer in Dec-Feb, winter in Jun-Aug
             double seasonalOffset;
@@ -161,13 +165,13 @@ namespace AstroToolkitWeb.Services
             {
                 seasonalOffset = Math.Sin((month - 7) * Math.PI / 6) * 10;
             }
-            
+
             double temperature = baseTemp + seasonalOffset + random.Next(-5, 6);
-            
+
             // Cloud cover tends to be higher in certain seasons
             int cloudBase = Math.Abs(month - 6) < 3 ? 30 : 50;
             int cloudCoverage = Math.Min(100, Math.Max(0, cloudBase + random.Next(-20, 21)));
-            
+
             // Generate weather description based on cloud coverage
             string weatherDescription;
             if (cloudCoverage < 20)
@@ -186,46 +190,46 @@ namespace AstroToolkitWeb.Services
             {
                 weatherDescription = "Overcast";
             }
-            
+
             // Generate simulated wind speed (m/s)
             double windSpeed = random.Next(0, 15) + random.NextDouble();
-            
+
             // Generate simulated wind direction (degrees)
             int windDirection = random.Next(0, 360);
-            
+
             // Generate simulated humidity (%)
             int humidity = random.Next(30, 95);
-            
+
             // Generate precipitation probability (higher with more clouds)
             int precipProbability = Math.Min(100, cloudCoverage + random.Next(-20, 20));
-            
+
             // Generate precipitation amount (mm)
             double precipitation = precipProbability > 50 ? random.NextDouble() * 8 : 0;
-            
+
             // Seeing index (astronomical term for atmospheric steadiness, 1-10)
             // Higher wind speeds reduce seeing quality
             int seeingIndex = Math.Max(1, Math.Min(10, 10 - (int)(windSpeed / 2) - random.Next(0, 3)));
-            
+
             // Transparency index (1-10)
             // Higher humidity reduces transparency
             int transparencyIndex = Math.Max(1, Math.Min(10, 10 - (humidity / 10) - (cloudCoverage / 20)));
-            
+
             // Calculate overall astro rating (1-10)
             int astroRating = Math.Max(1, (seeingIndex + transparencyIndex + (10 - cloudCoverage / 10)) / 3);
-            
+
             // Calculate sunrise/sunset times (approximation)
             DateTime baseDate = date.Date;
             double dayLengthHours = 12 + Math.Cos(latitude * Math.PI / 180) * Math.Cos((month - 6) * Math.PI / 6) * 6;
-            
+
             TimeSpan halfDayLength = TimeSpan.FromHours(dayLengthHours / 2);
             DateTime noonTime = baseDate.AddHours(12);
             DateTime sunriseTime = noonTime - halfDayLength;
             DateTime sunsetTime = noonTime + halfDayLength;
-            
+
             // Adjust for random variations
             sunriseTime = sunriseTime.AddMinutes(random.Next(-15, 16));
             sunsetTime = sunsetTime.AddMinutes(random.Next(-15, 16));
-            
+
             return new WeatherData
             {
                 Date = date.Date,
@@ -273,7 +277,7 @@ namespace AstroToolkitWeb.Services
                 return "overcast";
             }
         }
-        
+
         /// <summary>
         /// Ensures weather data has a valid icon code
         /// </summary>

@@ -1,0 +1,22 @@
+
+@if (IconCode != null)
+{
+    <img src="@GetIconPath()" alt="@IconCode weather icon" class="weather-icon" />
+}
+else
+{
+    <img src="/images/weather/placeholder.svg" alt="Weather icon placeholder" class="weather-icon" />
+}
+
+@code {
+    [Parameter]
+    public string? IconCode { get; set; }
+    
+    private string GetIconPath()
+    {
+        if (string.IsNullOrEmpty(IconCode))
+            return "/images/weather/placeholder.svg";
+            
+        return $"/images/weather/{IconCode}.svg";
+    }
+}

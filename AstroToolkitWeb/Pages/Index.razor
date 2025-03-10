@@ -1,0 +1,65 @@
+@page "/"
+@using AstroToolkitWeb.Pages.Components
+
+<h1>Current Conditions</h1>
+
+@* Assuming weatherData is populated elsewhere *@
+<div>
+    <WeatherIcon IconCode="@weatherData.IconCode" />
+    <p>Temperature: @weatherData.Temperature</p>
+    <p>Condition: @weatherData.Condition</p>
+</div>
+
+
+<h1>Forecast</h1>
+@* Assuming forecast is an array of forecast objects *@
+@foreach (var forecast in forecasts)
+{
+    <div>
+        <WeatherIcon IconCode="@forecast.IconCode" />
+        <p>Time: @forecast.Time</p>
+        <p>Temperature: @forecast.Temperature</p>
+        <p>Condition: @forecast.Condition</p>
+    </div>
+}
+
+
+@code {
+    // Placeholder data - Replace with actual data fetching
+    private WeatherData weatherData = new WeatherData { IconCode = "partly-cloudy", Temperature = 25, Condition = "Partly Cloudy" };
+    private List<Forecast> forecasts = new List<Forecast>()
+    {
+        new Forecast { IconCode = "cloudy", Time = "10:00 AM", Temperature = 22, Condition = "Cloudy"},
+        new Forecast { IconCode = "clear", Time = "2:00 PM", Temperature = 28, Condition = "Clear"}
+    };
+}
+
+@*  WeatherIcon Component (Assumption) *@
+@inherits ComponentBase
+<img src="@GetIconPath(IconCode)" alt="@IconCode" class="img-fluid mb-2" />
+
+@code {
+    [Parameter]
+    public string IconCode { get; set; }
+
+    private string GetIconPath(string iconCode)
+    {
+        return $"/images/{iconCode}.svg"; // Assumed image location
+    }
+}
+
+// Data Models (Assumptions)
+public class WeatherData
+{
+    public string IconCode { get; set; }
+    public int Temperature { get; set; }
+    public string Condition { get; set; }
+}
+
+public class Forecast
+{
+    public string IconCode { get; set; }
+    public string Time { get; set; }
+    public int Temperature { get; set; }
+    public string Condition { get; set; }
+}

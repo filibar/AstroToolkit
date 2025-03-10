@@ -71,8 +71,6 @@ namespace AstroToolkitWeb.Models
 
         public string? WeatherDescription { get; set; }
 
-        public string? IconCode { get; set; }
-
         public MoonPhase? MoonPhase { get; set; }
     }
 }
