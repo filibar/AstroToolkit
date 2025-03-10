@@ -282,18 +282,20 @@ footer {
 
 .spot-details-panel {
   position: absolute;
-  bottom: 0;
-  right: 0;
+  top: 20px;
+  right: 20px;
   width: 100%;
   max-width: 400px;
   z-index: 10;
-  margin: 20px;
-  transform: translateY(100%);
+  margin: 0;
+  transform: translateX(100%);
   transition: transform 0.3s ease-in-out;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.5);
+  border-left: 4px solid var(--accent);
 }
 
 .spot-details-panel.active {
-  transform: translateY(0);
+  transform: translateX(0);
 }
 
 /* Star Rating */
