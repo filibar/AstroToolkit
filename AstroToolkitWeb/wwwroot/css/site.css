@@ -77,6 +77,7 @@ h1, h2, h3, h4, h5, h6 {
   background-clip: text;
   -webkit-text-fill-color: transparent;
   display: inline-block;
+  color: white; /* Fallback color */
 }
 
 /* Navigation */
@@ -396,6 +397,53 @@ footer {
 
 .animate-fade-in-up {
   animation: fadeInUp 0.5s ease forwards;
+}
+
+/* Improved text contrast */
+.lead, p, .card-text, .card-body, .text-muted, 
+.form-label, .form-text, .table, .table th, .table td {
+  color: var(--text-light);
+}
+
+/* Darker backgrounds with lighter text */
+.bg-light {
+  background-color: var(--dark-light) !important;
+  color: var(--text-light);
+}
+
+.text-dark {
+  color: var(--text-light) !important;
+}
+
+/* Input fields with better contrast */
+.form-control {
+  background-color: rgba(255, 255, 255, 0.1);
+  border: 1px solid var(--card-border);
+  color: var(--text-light);
+}
+
+.form-control:focus {
+  background-color: rgba(255, 255, 255, 0.15);
+  color: var(--text-light);
+}
+
+.form-control::placeholder {
+  color: rgba(255, 255, 255, 0.5);
+}
+
+/* Heading with improved contrast */
+h1, h2, h3, h4, h5, h6 {
+  color: var(--text-light);
+}
+
+/* Weather page specific adjustments */
+.card-title, #viewing-score, #viewing-recommendation,
+#current-temp, #weather-description, #humidity, #wind-speed,
+#pressure, #cloud-cover, #visibility, #dew-point, #precipitation,
+#moon-phase-name, #moon-illumination, #moon-age, #moon-astro-rating,
+#sunrise-time, #sunset-time, #astro-twilight, #observation-tips,
+.form-check-label {
+  color: var(--text-light);
 }
 
 /* Responsive adjustments */
