@@ -4,164 +4,293 @@
     ViewData["Title"] = "Home";
 }
 
-<div class="container">
-    <div class="jumbotron bg-dark text-light p-5 rounded mb-4">
-        <div class="row align-items-center">
-            <div class="col-md-8">
-                <h1 class="display-4">AstroToolkit</h1>
-                <p class="lead">
-                    Your comprehensive toolkit for astrophotography planning, weather forecasting, and technical calculations.
-                </p>
-                <hr class="my-4 bg-light">
-                <p>
-                    Find dark sky locations, check weather conditions for stargazing, and use specialized tools to 
-                    improve your astrophotography results.
-                </p>
-                <div class="mt-4">
-                    <a class="btn btn-primary btn-lg me-2" href="/Map" role="button">
-                        <i class="bi bi-map"></i> Find Dark Skies
-                    </a>
-                    <a class="btn btn-info btn-lg" href="/Weather" role="button">
-                        <i class="bi bi-cloud-moon"></i> Check Weather
-                    </a>
-                </div>
-            </div>
-            <div class="col-md-4 text-center d-none d-md-block">
-                <i class="bi bi-stars display-1 text-warning"></i>
-            </div>
-        </div>
-    </div>
-
-    <div class="row mb-4">
-        <div class="col-md-4 mb-4">
-            <div class="card h-100">
-                <div class="card-body text-center">
-                    <i class="bi bi-map text-primary mb-3" style="font-size: 2.5rem;"></i>
-                    <h3 class="card-title">Dark Sky Map</h3>
-                    <p class="card-text">
-                        Find and share the best locations for astrophotography with light pollution data, user ratings, and photos.
+<!-- Hero Section -->
+<section class="hero-section mb-5">
+    <div class="card hero-card p-0 border-0">
+        <div class="card-body p-5">
+            <div class="row align-items-center">
+                <div class="col-lg-7 pe-lg-5">
+                    <h1 class="display-4 fw-bold mb-4">Discover the <span class="gradient-text">Universe</span></h1>
+                    <p class="lead mb-4">
+                        Your comprehensive toolkit for astrophotography planning, weather forecasting, and technical calculations.
+                        Find perfect dark sky locations and capture the cosmos like never before.
                     </p>
-                    <a href="/Map" class="btn btn-outline-primary">Explore Map</a>
+                    <div class="d-flex flex-wrap gap-3 mt-4">
+                        <a class="btn btn-primary btn-lg btn-glow" href="/Map">
+                            <i class="bi bi-map me-2"></i> Find Dark Skies
+                        </a>
+                        <a class="btn btn-outline-light btn-lg btn-glow" href="/Weather">
+                            <i class="bi bi-cloud-moon me-2"></i> Check Weather
+                        </a>
+                    </div>
                 </div>
-            </div>
-        </div>
-        <div class="col-md-4 mb-4">
-            <div class="card h-100">
-                <div class="card-body text-center">
-                    <i class="bi bi-cloud-moon text-primary mb-3" style="font-size: 2.5rem;"></i>
-                    <h3 class="card-title">Astro Weather</h3>
-                    <p class="card-text">
-                        Get specialized astronomy weather forecasts with moon phases, cloud cover, and viewing quality ratings.
-                    </p>
-                    <a href="/Weather" class="btn btn-outline-primary">Check Weather</a>
-                </div>
-            </div>
-        </div>
-        <div class="col-md-4 mb-4">
-            <div class="card h-100">
-                <div class="card-body text-center">
-                    <i class="bi bi-calculator text-primary mb-3" style="font-size: 2.5rem;"></i>
-                    <h3 class="card-title">Astronomy Tools</h3>
-                    <p class="card-text">
-                        Use specialized calculators for exposure times, field of view, depth of field, and polar alignment.
-                    </p>
-                    <a href="/Tools" class="btn btn-outline-primary">Use Tools</a>
+                <div class="col-lg-5 mt-5 mt-lg-0 text-center">
+                    <svg width="300" height="300" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg" class="hero-illustration">
+                        <circle cx="100" cy="100" r="80" fill="#0a1128" stroke="#4a56e2" stroke-width="1" />
+                        <circle cx="100" cy="100" r="60" fill="none" stroke="#7c4dff" stroke-width="0.5" stroke-dasharray="2 2" />
+                        <circle cx="100" cy="100" r="40" fill="none" stroke="#00e5ff" stroke-width="0.5" stroke-dasharray="1 1" />
+                        <!-- Stars -->
+                        <circle cx="70" cy="65" r="2" fill="#fff" />
+                        <circle cx="120" cy="50" r="1.5" fill="#fff" />
+                        <circle cx="150" cy="105" r="2" fill="#fff" />
+                        <circle cx="60" cy="140" r="1.5" fill="#fff" />
+                        <circle cx="110" cy="160" r="2.5" fill="#fff" />
+                        <circle cx="160" cy="70" r="1" fill="#fff" />
+                        <circle cx="30" cy="90" r="1.5" fill="#fff" />
+                        <!-- Moon -->
+                        <circle cx="55" cy="55" r="15" fill="#cfd8dc" stroke="#b0bec5" stroke-width="0.5" />
+                        <circle cx="50" cy="50" r="5" fill="#b0bec5" stroke="#90a4ae" stroke-width="0.2" />
+                        <circle cx="60" cy="52" r="3" fill="#b0bec5" stroke="#90a4ae" stroke-width="0.2" />
+                        <circle cx="57" cy="62" r="4" fill="#b0bec5" stroke="#90a4ae" stroke-width="0.2" />
+                        <!-- Camera -->
+                        <rect x="130" y="125" width="30" height="20" rx="2" fill="#455a64" />
+                        <rect x="135" y="120" width="20" height="5" rx="1" fill="#546e7a" />
+                        <circle cx="145" cy="135" r="8" fill="#263238" stroke="#37474f" stroke-width="1" />
+                        <circle cx="145" cy="135" r="5" fill="#000" stroke="#00e5ff" stroke-width="0.5" />
+                        <rect x="130" y="145" width="30" height="5" rx="1" fill="#546e7a" />
+                    </svg>
                 </div>
             </div>
         </div>
     </div>
+</section>
 
-    <div class="row my-5">
-        <div class="col-12">
-            <h2 class="text-center mb-4">Latest Dark Sky Locations</h2>
+<!-- Features Section -->
+<section class="mb-5">
+    <div class="row">
+        <div class="col-md-4 mb-4">
+            <div class="card feature-card h-100 animate-fade-in-up" style="animation-delay: 0.1s">
+                <div class="card-body">
+                    <div class="icon text-primary mb-4">
+                        <i class="bi bi-map-fill"></i>
+                    </div>
+                    <h3 class="fw-bold">Dark Sky Map</h3>
+                    <p>
+                        Discover and share the best astrophotography locations around the world. 
+                        View light pollution data, user ratings, and stunning photos from each spot.
+                    </p>
+                    <a href="/Map" class="btn btn-outline-light mt-3">
+                        <i class="bi bi-compass me-2"></i> Explore Map
+                    </a>
+                </div>
+            </div>
         </div>
+        <div class="col-md-4 mb-4">
+            <div class="card feature-card h-100 animate-fade-in-up" style="animation-delay: 0.2s">
+                <div class="card-body">
+                    <div class="icon text-info mb-4">
+                        <i class="bi bi-cloud-moon-fill"></i>
+                    </div>
+                    <h3 class="fw-bold">Astro Weather</h3>
+                    <p>
+                        Get specialized forecasts designed for astrophotographers with detailed moon phases, 
+                        cloud cover predictions, and viewing quality ratings.
+                    </p>
+                    <a href="/Weather" class="btn btn-outline-light mt-3">
+                        <i class="bi bi-thermometer-sun me-2"></i> Check Weather
+                    </a>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4 mb-4">
+            <div class="card feature-card h-100 animate-fade-in-up" style="animation-delay: 0.3s">
+                <div class="card-body">
+                    <div class="icon text-warning mb-4">
+                        <i class="bi bi-gear-fill"></i>
+                    </div>
+                    <h3 class="fw-bold">Astronomy Tools</h3>
+                    <p>
+                        Calculate optimal camera settings with specialized tools for exposure times, 
+                        field of view, depth of field, and polar alignment.
+                    </p>
+                    <a href="/Tools" class="btn btn-outline-light mt-3">
+                        <i class="bi bi-tools me-2"></i> Use Tools
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Dark Sky Locations Section -->
+<section class="mb-5">
+    <div class="d-flex align-items-center mb-4">
+        <h2 class="fw-bold me-auto mb-0">Top Dark Sky Locations</h2>
+        <a href="/Map" class="btn btn-sm btn-outline-light">
+            <i class="bi bi-grid"></i> View All
+        </a>
+    </div>
+    
+    <div class="row">
         @foreach (var spot in Model.RecentSpots)
         {
             <div class="col-md-4 mb-4">
-                <div class="card h-100">
+                <div class="card h-100 spot-card animate-fade-in-up" style="animation-delay: @(0.1 * (Model.RecentSpots.ToList().IndexOf(spot) + 1))s">
                     <div class="card-header d-flex justify-content-between align-items-center">
-                        <h5 class="mb-0">@spot.Name</h5>
-                        <span class="badge bg-info">
-                            Level @spot.LightPollutionLevel
+                        <h5 class="fw-bold mb-0">@spot.Name</h5>
+                        <span class="badge bg-primary">
+                            Bortle @spot.LightPollutionLevel
                         </span>
                     </div>
                     <div class="card-body">
-                        <p class="card-text">@spot.Description.Substring(0, Math.Min(100, spot.Description.Length))@(spot.Description.Length > 100 ? "..." : "")</p>
-                        <div class="d-flex justify-content-between">
+                        <p>@spot.Description.Substring(0, Math.Min(100, spot.Description.Length))@(spot.Description.Length > 100 ? "..." : "")</p>
+                        <div class="d-flex justify-content-between align-items-center mt-3">
                             <div>
-                                <small class="text-muted">Rating:</small>
-                                <div>
+                                <small class="text-muted d-block mb-1">Rating:</small>
+                                <div class="star-rating">
                                     @for (int i = 0; i < 5; i++)
                                     {
                                         if (i < spot.Rating)
                                         {
-                                            <i class="bi bi-star-fill text-warning"></i>
+                                            <i class="bi bi-star-fill"></i>
                                         }
                                         else
                                         {
-                                            <i class="bi bi-star text-warning"></i>
+                                            <i class="bi bi-star"></i>
                                         }
                                     }
                                 </div>
                             </div>
-                            <div>
-                                <small class="text-muted">Added:</small>
-                                <div>@spot.CreatedDate.ToString("MMM d, yyyy")</div>
+                            <div class="text-end">
+                                <small class="text-muted d-block mb-1">Added:</small>
+                                <span>@spot.CreatedDate.ToString("MMM d, yyyy")</span>
                             </div>
                         </div>
                     </div>
-                    <div class="card-footer text-end">
-                        <a href="/Map?spotId=@spot.Id" class="btn btn-sm btn-primary">View on Map</a>
+                    <div class="card-footer">
+                        <div class="d-flex justify-content-between">
+                            <span class="text-muted">
+                                <i class="bi bi-geo-alt"></i> @($"{spot.Latitude:F1}°, {spot.Longitude:F1}°")
+                            </span>
+                            <a href="/Map?spotId=@spot.Id" class="btn btn-sm btn-primary">
+                                <i class="bi bi-map me-1"></i> View
+                            </a>
+                        </div>
                     </div>
                 </div>
             </div>
         }
     </div>
+</section>
 
-    <div class="row mt-5 mb-4 py-4 bg-light rounded">
-        <div class="col-md-6">
-            <h2>Why Use AstroToolkit?</h2>
-            <ul class="list-group list-group-flush mt-3">
-                <li class="list-group-item bg-transparent">
-                    <i class="bi bi-check-circle-fill text-success me-2"></i>
-                    Find dark sky locations with accurate light pollution data
-                </li>
-                <li class="list-group-item bg-transparent">
-                    <i class="bi bi-check-circle-fill text-success me-2"></i>
-                    Get specialized astronomy weather forecasts
-                </li>
-                <li class="list-group-item bg-transparent">
-                    <i class="bi bi-check-circle-fill text-success me-2"></i>
-                    Calculate optimal camera settings with the 500 rule and NPF rule
-                </li>
-                <li class="list-group-item bg-transparent">
-                    <i class="bi bi-check-circle-fill text-success me-2"></i>
-                    Share your favorite observation spots with the community
-                </li>
-                <li class="list-group-item bg-transparent">
-                    <i class="bi bi-check-circle-fill text-success me-2"></i>
-                    Access all tools from any device - mobile, tablet or desktop
-                </li>
-            </ul>
-        </div>
-        <div class="col-md-6 mt-4 mt-md-0">
-            <h2>Get Started</h2>
-            <p class="mt-3">
-                Join our community of astrophotographers and stargazers today. Create an account to save your favorite
-                spots, contribute to the community map, and get personalized recommendations.
-            </p>
-            <div class="d-grid gap-2 d-md-flex justify-content-md-start mt-4">
-                <a href="#" class="btn btn-primary me-md-2">
-                    <i class="bi bi-person-plus"></i> Sign Up
-                </a>
-                <a href="#" class="btn btn-outline-secondary">
-                    <i class="bi bi-info-circle"></i> Learn More
-                </a>
+<!-- Benefits & CTA Section -->
+<section>
+    <div class="card mb-4 border-0">
+        <div class="row g-0">
+            <div class="col-md-7">
+                <div class="card-body p-5">
+                    <h2 class="fw-bold mb-4 gradient-text">Why Choose AstroToolkit?</h2>
+                    <ul class="benefits-list">
+                        <li class="mb-3">
+                            <div class="d-flex">
+                                <div class="benefits-icon me-3">
+                                    <i class="bi bi-check-circle-fill"></i>
+                                </div>
+                                <div>
+                                    <h5 class="fw-bold mb-2">Find Perfect Dark Sky Spots</h5>
+                                    <p>Locate and share dark sky locations with accurate light pollution data and community reviews</p>
+                                </div>
+                            </div>
+                        </li>
+                        <li class="mb-3">
+                            <div class="d-flex">
+                                <div class="benefits-icon me-3">
+                                    <i class="bi bi-check-circle-fill"></i>
+                                </div>
+                                <div>
+                                    <h5 class="fw-bold mb-2">Weather Optimized for Astronomy</h5>
+                                    <p>Get astronomy-specific forecasts with cloud cover, seeing conditions, and moon phases</p>
+                                </div>
+                            </div>
+                        </li>
+                        <li class="mb-3">
+                            <div class="d-flex">
+                                <div class="benefits-icon me-3">
+                                    <i class="bi bi-check-circle-fill"></i>
+                                </div>
+                                <div>
+                                    <h5 class="fw-bold mb-2">Camera Setting Calculators</h5>
+                                    <p>Use specialized tools like 500 rule, NPF rule, FOV, and DoF calculators for perfect shots</p>
+                                </div>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="d-flex">
+                                <div class="benefits-icon me-3">
+                                    <i class="bi bi-check-circle-fill"></i>
+                                </div>
+                                <div>
+                                    <h5 class="fw-bold mb-2">Fully Mobile Compatible</h5>
+                                    <p>Access all features from any device - perfect for field use while shooting</p>
+                                </div>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            <div class="col-md-5 d-flex align-items-center">
+                <div class="card-body p-5 text-center">
+                    <h3 class="fw-bold mb-4">Ready to explore the cosmos?</h3>
+                    <p class="mb-4">
+                        Join our community of astrophotographers and stargazers today. Create an account to save your favorite
+                        spots, contribute to the map, and get personalized recommendations.
+                    </p>
+                    <div class="d-grid gap-3">
+                        <a href="#" class="btn btn-primary btn-lg btn-glow">
+                            <i class="bi bi-person-plus me-2"></i> Sign Up Now
+                        </a>
+                        <a href="#" class="btn btn-outline-light">
+                            <i class="bi bi-info-circle me-2"></i> Learn More
+                        </a>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
-</div>
+</section>
 
 @section Styles {
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.8.1/font/bootstrap-icons.css">
+    <style>
+        .hero-section {
+            margin-top: -1.5rem;
+        }
+        
+        .hero-card {
+            background-color: rgba(19, 27, 60, 0.6);
+            overflow: hidden;
+            position: relative;
+        }
+        
+        .hero-illustration {
+            max-width: 100%;
+            height: auto;
+        }
+        
+        .benefits-icon {
+            width: 30px;
+            height: 30px;
+            min-width: 30px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            margin-top: 0.2rem;
+        }
+        
+        .benefits-list {
+            list-style: none;
+            padding: 0;
+        }
+        
+        .spot-card {
+            transition: all 0.3s ease;
+        }
+        
+        .spot-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+        }
+    </style>
 }

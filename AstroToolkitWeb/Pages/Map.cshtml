@@ -223,6 +223,14 @@
             color: #ffc107;
         }
         
+        .api-key-alert {
+            max-width: 800px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+            background-color: rgba(255, 193, 7, 0.1);
+            border: 1px solid rgba(255, 193, 7, 0.2);
+            border-radius: 0.8rem;
+        }
+        
         @@media (max-width: 768px) {
             .map-overlay-container {
                 max-width: 80%;
@@ -243,15 +251,25 @@
     }
     else 
     {
-        <div class="alert alert-warning mt-3">
-            <h4 class="alert-heading">Google Maps API Key Required</h4>
-            <p>To use the map functionality, you need to configure a Google Maps API key.</p>
-        </div>
         <script>
             // Fallback function when no API key is provided
             function initMap() {
                 console.log("Map initialization skipped - no API key provided");
-                document.getElementById('map').innerHTML = '<div class="d-flex justify-content-center align-items-center h-100"><p class="text-center">Map unavailable - API key required.<br>Please configure a Google Maps API key in the application settings.</p></div>';
+                document.getElementById('map').innerHTML = `
+                    <div class="d-flex justify-content-center align-items-center h-100">
+                        <div class="alert alert-warning m-4 api-key-alert">
+                            <div class="d-flex align-items-center">
+                                <div class="me-3">
+                                    <i class="bi bi-exclamation-triangle-fill fs-2"></i>
+                                </div>
+                                <div>
+                                    <h4 class="alert-heading mb-2">Google Maps API Key Required</h4>
+                                    <p class="mb-1">To display the interactive map, a Google Maps API key is needed.</p>
+                                    <p class="mb-0">Please provide a valid Google Maps API key in the configuration settings.</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>`;
             }
             window.onload = initMap;
         </script>
