@@ -247,7 +247,16 @@
 @section Scripts {
     @if (!string.IsNullOrEmpty(Model.MapsApiKey) && Model.MapsApiKey != "YOUR_API_KEY") 
     {
-        <script src="https://maps.googleapis.com/maps/api/js?key=@Model.MapsApiKey&callback=initMap" async defer></script>
+        <script>
+            function loadGoogleMapsScript() {
+                const script = document.createElement('script');
+                script.src = 'https://maps.googleapis.com/maps/api/js?key=@Model.MapsApiKey&callback=initMap';
+                script.async = true;
+                script.defer = true;
+                document.head.appendChild(script);
+            }
+            window.onload = loadGoogleMapsScript;
+        </script>
     }
     else 
     {
