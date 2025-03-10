@@ -1,0 +1,207 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:viewmodels="clr-namespace:AstroToolkit.ViewModels"
+             x:Class="AstroToolkit.Views.WeatherPage"
+             x:DataType="viewmodels:WeatherViewModel"
+             Title="{Binding Title}">
+
+    <RefreshView Command="{Binding RefreshWeatherDataCommand}" IsRefreshing="{Binding IsBusy}">
+        <ScrollView>
+            <VerticalStackLayout Padding="20" Spacing="15">
+                <!-- Location Information -->
+                <Frame BorderColor="{DynamicResource Primary}" BackgroundColor="{DynamicResource SectionBackground}">
+                    <VerticalStackLayout Spacing="5">
+                        <Label Text="{Binding LocationName}" 
+                               FontSize="Large" 
+                               HorizontalOptions="Center" />
+                        <Label Text="{Binding CurrentLatitude, StringFormat='Lat: {0:F6}'}" 
+                               HorizontalOptions="Center" />
+                        <Label Text="{Binding CurrentLongitude, StringFormat='Lon: {0:F6}'}" 
+                               HorizontalOptions="Center" />
+                        <HorizontalStackLayout HorizontalOptions="Center" Margin="0,10,0,0">
+                            <Label Text="Astrophotography Conditions: " />
+                            <Label Text="{Binding IsGoodForAstrophotography, Converter={StaticResource BoolToStringConverter}, ConverterParameter='Good|Poor'}"
+                                   TextColor="{Binding IsGoodForAstrophotography, Converter={StaticResource BoolToColorConverter}, ConverterParameter='Green|Red'}"
+                                   FontAttributes="Bold" />
+                        </HorizontalStackLayout>
+                    </VerticalStackLayout>
+                </Frame>
+
+                <!-- Current Weather Section -->
+                <Frame BorderColor="{DynamicResource Primary}" BackgroundColor="{DynamicResource SectionBackground}">
+                    <Grid ColumnDefinitions="Auto,*" RowDefinitions="Auto,Auto,Auto,Auto,Auto,Auto">
+                        <Label Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2" 
+                               Text="Current Weather" 
+                               FontSize="Medium" 
+                               FontAttributes="Bold" 
+                               Margin="0,0,0,10" />
+
+                        <Image Grid.Row="1" Grid.Column="0" 
+                               Source="{Binding CurrentWeather.WeatherIcon, StringFormat='https://openweathermap.org/img/wn/{0}@2x.png'}"
+                               HeightRequest="50" 
+                               WidthRequest="50" />
+
+                        <Label Grid.Row="1" Grid.Column="1" 
+                               Text="{Binding CurrentWeather.WeatherDescription, StringFormat='{0}'}" 
+                               FontSize="Medium"
+                               VerticalOptions="Center" />
+
+                        <Label Grid.Row="2" Grid.Column="0" Text="Temperature:" Margin="0,5,0,0" />
+                        <Label Grid.Row="2" Grid.Column="1" Text="{Binding CurrentWeather.Temperature, StringFormat='{0:F1}°C'}" Margin="0,5,0,0" />
+
+                        <Label Grid.Row="3" Grid.Column="0" Text="Humidity:" Margin="0,5,0,0" />
+                        <Label Grid.Row="3" Grid.Column="1" Text="{Binding CurrentWeather.Humidity, StringFormat='{0}%'}" Margin="0,5,0,0" />
+
+                        <Label Grid.Row="4" Grid.Column="0" Text="Cloud Coverage:" Margin="0,5,0,0" />
+                        <Label Grid.Row="4" Grid.Column="1" Text="{Binding CurrentWeather.CloudCoverageTotal, StringFormat='{0}%'}" Margin="0,5,0,0" />
+
+                        <Label Grid.Row="5" Grid.Column="0" Text="Visibility:" Margin="0,5,0,0" />
+                        <Label Grid.Row="5" Grid.Column="1" Text="{Binding CurrentWeather.Visibility, StringFormat='{0:F1} km'}" Margin="0,5,0,0" />
+                    </Grid>
+                </Frame>
+
+                <!-- Moon Phase Section -->
+                <Frame BorderColor="{DynamicResource Primary}" BackgroundColor="{DynamicResource SectionBackground}">
+                    <Grid ColumnDefinitions="Auto,*" RowDefinitions="Auto,Auto,Auto,Auto,Auto,Auto">
+                        <Label Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2" 
+                               Text="Moon Information" 
+                               FontSize="Medium" 
+                               FontAttributes="Bold" 
+                               Margin="0,0,0,10" />
+
+                        <Image Grid.Row="1" Grid.Column="0" 
+                               Source="{Binding MoonPhaseIconSource, StringFormat='moon_phases.svg#{0}'}"
+                               HeightRequest="50" 
+                               WidthRequest="50" />
+
+                        <Label Grid.Row="1" Grid.Column="1" 
+                               Text="{Binding CurrentMoonPhase.PhaseName}" 
+                               FontSize="Medium"
+                               VerticalOptions="Center" />
+
+                        <Label Grid.Row="2" Grid.Column="0" Text="Illumination:" Margin="0,5,0,0" />
+                        <Label Grid.Row="2" Grid.Column="1" Text="{Binding CurrentMoonPhase.IlluminationPercentage, StringFormat='{0:F1}%'}" Margin="0,5,0,0" />
+
+                        <Label Grid.Row="3" Grid.Column="0" Text="Days to New Moon:" Margin="0,5,0,0" />
+                        <Label Grid.Row="3" Grid.Column="1" Text="{Binding CurrentMoonPhase.DaysToNextNewMoon}" Margin="0,5,0,0" />
+
+                        <Label Grid.Row="4" Grid.Column="0" Text="Days to Full Moon:" Margin="0,5,0,0" />
+                        <Label Grid.Row="4" Grid.Column="1" Text="{Binding CurrentMoonPhase.DaysToNextFullMoon}" Margin="0,5,0,0" />
+
+                        <Label Grid.Row="5" Grid.Column="0" Text="Astro Impact:" Margin="0,5,0,0" />
+                        <Label Grid.Row="5" Grid.Column="1" Text="{Binding CurrentMoonPhase.GetAstroImpact}" Margin="0,5,0,0" />
+                    </Grid>
+                </Frame>
+
+                <!-- Cloud Coverage Section -->
+                <Frame BorderColor="{DynamicResource Primary}" BackgroundColor="{DynamicResource SectionBackground}">
+                    <VerticalStackLayout Spacing="10">
+                        <Label Text="Cloud Coverage" 
+                               FontSize="Medium" 
+                               FontAttributes="Bold" />
+
+                        <Grid ColumnDefinitions="*,3*" RowDefinitions="Auto,Auto,Auto,Auto">
+                            <Label Grid.Row="0" Grid.Column="0" Text="Total:" />
+                            <ProgressBar Grid.Row="0" Grid.Column="1" 
+                                        Progress="{Binding CurrentWeather.CloudCoverageTotal, Converter={StaticResource IntToDoubleConverter}, ConverterParameter=100}" />
+
+                            <Label Grid.Row="1" Grid.Column="0" Text="Low Clouds:" />
+                            <ProgressBar Grid.Row="1" Grid.Column="1" 
+                                        Progress="{Binding CurrentWeather.CloudCoverageLow, Converter={StaticResource IntToDoubleConverter}, ConverterParameter=100}" />
+
+                            <Label Grid.Row="2" Grid.Column="0" Text="Mid Clouds:" />
+                            <ProgressBar Grid.Row="2" Grid.Column="1" 
+                                        Progress="{Binding CurrentWeather.CloudCoverageMid, Converter={StaticResource IntToDoubleConverter}, ConverterParameter=100}" />
+
+                            <Label Grid.Row="3" Grid.Column="0" Text="High Clouds:" />
+                            <ProgressBar Grid.Row="3" Grid.Column="1" 
+                                        Progress="{Binding CurrentWeather.CloudCoverageHigh, Converter={StaticResource IntToDoubleConverter}, ConverterParameter=100}" />
+                        </Grid>
+                    </VerticalStackLayout>
+                </Frame>
+
+                <!-- Hourly Forecast Summary -->
+                <Frame BorderColor="{DynamicResource Primary}" BackgroundColor="{DynamicResource SectionBackground}">
+                    <VerticalStackLayout Spacing="10">
+                        <Label Text="Hourly Forecast" 
+                               FontSize="Medium" 
+                               FontAttributes="Bold" />
+
+                        <CollectionView ItemsSource="{Binding HourlyForecast}" 
+                                       HeightRequest="180" 
+                                       HorizontalScrollBarVisibility="Never">
+                            <CollectionView.ItemsLayout>
+                                <LinearItemsLayout Orientation="Horizontal" ItemSpacing="10" />
+                            </CollectionView.ItemsLayout>
+                            <CollectionView.ItemTemplate>
+                                <DataTemplate>
+                                    <Frame Padding="10" WidthRequest="100" 
+                                           BackgroundColor="{StaticResource ItemBackground}" 
+                                           BorderColor="{StaticResource Primary}">
+                                        <VerticalStackLayout>
+                                            <Label Text="{Binding Timestamp, StringFormat='{0:HH:mm}'}" 
+                                                   HorizontalOptions="Center" />
+                                            <Image Source="{Binding WeatherIcon, StringFormat='https://openweathermap.org/img/wn/{0}.png'}" 
+                                                   HeightRequest="40" 
+                                                   WidthRequest="40" 
+                                                   HorizontalOptions="Center" />
+                                            <Label Text="{Binding Temperature, StringFormat='{0:F1}°C'}" 
+                                                   HorizontalOptions="Center" />
+                                            <Label Text="{Binding CloudCoverageTotal, StringFormat='Clouds: {0}%'}" 
+                                                   HorizontalOptions="Center" 
+                                                   FontSize="Small" />
+                                        </VerticalStackLayout>
+                                    </Frame>
+                                </DataTemplate>
+                            </CollectionView.ItemTemplate>
+                        </CollectionView>
+                    </VerticalStackLayout>
+                </Frame>
+
+                <!-- Daily Forecast Summary -->
+                <Frame BorderColor="{DynamicResource Primary}" BackgroundColor="{DynamicResource SectionBackground}">
+                    <VerticalStackLayout Spacing="10">
+                        <Label Text="Daily Forecast" 
+                               FontSize="Medium" 
+                               FontAttributes="Bold" />
+
+                        <CollectionView ItemsSource="{Binding DailyForecast}" 
+                                       HeightRequest="280">
+                            <CollectionView.ItemTemplate>
+                                <DataTemplate>
+                                    <Grid Margin="0,5" ColumnDefinitions="Auto,*,Auto" RowDefinitions="Auto,Auto">
+                                        <Label Grid.Row="0" Grid.Column="0" 
+                                               Text="{Binding Timestamp, StringFormat='{0:ddd, MMM d}'}" 
+                                               VerticalOptions="Center" />
+                                        
+                                        <Image Grid.Row="0" Grid.Column="1" 
+                                               Source="{Binding WeatherIcon, StringFormat='https://openweathermap.org/img/wn/{0}.png'}" 
+                                               HeightRequest="40" 
+                                               WidthRequest="40" 
+                                               HorizontalOptions="Start" />
+                                        
+                                        <Label Grid.Row="0" Grid.Column="2" 
+                                               Text="{Binding Temperature, StringFormat='{0:F1}°C'}" 
+                                               VerticalOptions="Center" />
+                                        
+                                        <Label Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="3" 
+                                               Text="{Binding CloudCoverageTotal, StringFormat='Cloud Coverage: {0}%'}" 
+                                               FontSize="Small" />
+                                    </Grid>
+                                </DataTemplate>
+                            </CollectionView.ItemTemplate>
+                        </CollectionView>
+                    </VerticalStackLayout>
+                </Frame>
+
+                <!-- Error Message -->
+                <Label Text="{Binding ErrorMessage}" 
+                       IsVisible="{Binding HasError}" 
+                       TextColor="Red" 
+                       HorizontalOptions="Center" />
+            </VerticalStackLayout>
+        </ScrollView>
+    </RefreshView>
+
+</ContentPage>

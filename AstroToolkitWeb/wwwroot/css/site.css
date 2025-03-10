@@ -1,0 +1,126 @@
+/* General styles */
+html {
+  position: relative;
+  min-height: 100%;
+}
+
+body {
+  margin-bottom: 160px; /* Footer height */
+}
+
+.footer {
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+}
+
+/* Custom card styles */
+.card {
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  border: none;
+  margin-bottom: 20px;
+}
+
+.card-header {
+  background-color: #f8f9fa;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.125);
+  font-weight: 500;
+}
+
+/* Map page styles */
+#map {
+  border-radius: 0.25rem;
+}
+
+.info-window {
+  min-width: 200px;
+  max-width: 300px;
+}
+
+/* Weather page styles */
+.rating-badge {
+  font-size: 0.8rem;
+  padding: 0.3rem 0.6rem;
+}
+
+/* Tools page styles */
+.tool-card {
+  transition: transform 0.2s;
+}
+
+.tool-card:hover {
+  transform: translateY(-5px);
+}
+
+/* Dark mode toggle */
+.dark-mode {
+  background-color: #343a40;
+  color: #fff;
+}
+
+.dark-mode .card {
+  background-color: #454d55;
+  color: #fff;
+}
+
+.dark-mode .card-header {
+  background-color: #3a4047;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.125);
+}
+
+.dark-mode .bg-light {
+  background-color: #343a40 !important;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  body {
+    margin-bottom: 300px; /* Larger footer on small screens */
+  }
+  
+  .footer {
+    text-align: center;
+  }
+}
+
+/* Custom styles for moon phases */
+.moon-phase-icon {
+  width: 50px;
+  height: 50px;
+  display: inline-block;
+}
+
+/* Visualization styles for calculators */
+.visualization-container {
+  height: 120px;
+  position: relative;
+  border: 1px solid #dee2e6;
+  border-radius: 0.25rem;
+  margin-top: 1rem;
+  margin-bottom: 1rem;
+}
+
+/* Toast notifications */
+.toast-container {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  z-index: 1050;
+}
+
+/* Accent colors for astronomy quality ratings */
+.quality-excellent {
+  color: #28a745;
+}
+
+.quality-good {
+  color: #17a2b8;
+}
+
+.quality-fair {
+  color: #ffc107;
+}
+
+.quality-poor {
+  color: #dc3545;
+}

@@ -1,0 +1,240 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:viewmodels="clr-namespace:AstroToolkit.ViewModels"
+             x:Class="AstroToolkit.Views.ToolsPage"
+             x:DataType="viewmodels:ToolsViewModel"
+             Title="{Binding Title}">
+
+    <ScrollView>
+        <VerticalStackLayout Padding="20" Spacing="15">
+            <!-- Current Location Section -->
+            <Frame BorderColor="{DynamicResource Primary}" BackgroundColor="{DynamicResource SectionBackground}">
+                <VerticalStackLayout Spacing="10">
+                    <Label Text="Current Location" 
+                           FontSize="Medium" 
+                           FontAttributes="Bold" />
+
+                    <Grid ColumnDefinitions="Auto,*" RowDefinitions="Auto,Auto,Auto">
+                        <Label Grid.Row="0" Grid.Column="0" Text="Latitude:" />
+                        <Label Grid.Row="0" Grid.Column="1" Text="{Binding FormattedLatitude}" />
+
+                        <Label Grid.Row="1" Grid.Column="0" Text="Longitude:" />
+                        <Label Grid.Row="1" Grid.Column="1" Text="{Binding FormattedLongitude}" />
+                    </Grid>
+
+                    <Button Text="Get Current Location" 
+                            Command="{Binding GetCurrentLocationCommand}" />
+                </VerticalStackLayout>
+            </Frame>
+
+            <!-- Polar Alignment Tool -->
+            <Frame BorderColor="{DynamicResource Primary}" BackgroundColor="{DynamicResource SectionBackground}">
+                <VerticalStackLayout Spacing="10">
+                    <Label Text="Polar Alignment" 
+                           FontSize="Medium" 
+                           FontAttributes="Bold" />
+
+                    <Grid ColumnDefinitions="*,*" RowDefinitions="Auto,Auto,Auto">
+                        <Label Grid.Row="0" Grid.Column="0" Text="Polaris Position" HorizontalOptions="Center" />
+                        <Label Grid.Row="0" Grid.Column="1" Text="RA Mount View" HorizontalOptions="Center" />
+
+                        <!-- Polar Scope View -->
+                        <Frame Grid.Row="1" Grid.Column="0" BorderColor="{DynamicResource Primary}" 
+                               CornerRadius="90" HeightRequest="180" WidthRequest="180" 
+                               Padding="0" HorizontalOptions="Center" Margin="0,10,0,10">
+                            <Grid>
+                                <!-- Circle for scope field -->
+                                <Ellipse Stroke="{DynamicResource Primary}" StrokeThickness="2" 
+                                         Fill="Transparent" />
+                                
+                                <!-- Crosshairs -->
+                                <Line X1="0" Y1="90" X2="180" Y2="90" 
+                                      Stroke="{DynamicResource Primary}" StrokeThickness="1"/>
+                                <Line X1="90" Y1="0" X2="90" Y2="180" 
+                                      Stroke="{DynamicResource Primary}" StrokeThickness="1"/>
+                                
+                                <!-- Polaris position marker calculated from angle and offset -->
+                                <Ellipse x:Name="PolarisMarker" Fill="Gold" WidthRequest="10" HeightRequest="10"
+                                         HorizontalOptions="Center" VerticalOptions="Center" />
+                            </Grid>
+                        </Frame>
+
+                        <!-- RA Mount Diagram -->
+                        <Frame Grid.Row="1" Grid.Column="1" BorderColor="{DynamicResource Primary}" 
+                               CornerRadius="90" HeightRequest="180" WidthRequest="180" 
+                               Padding="0" HorizontalOptions="Center" Margin="0,10,0,10">
+                            <Grid>
+                                <!-- Circle for mount field -->
+                                <Ellipse Stroke="{DynamicResource Primary}" StrokeThickness="2" 
+                                         Fill="Transparent" />
+                                
+                                <!-- Hour markings (simplified) -->
+                                <Label Text="0h" FontSize="Small" HorizontalOptions="Center" 
+                                       VerticalOptions="Start" Margin="0,5,0,0" />
+                                <Label Text="6h" FontSize="Small" HorizontalOptions="End" 
+                                       VerticalOptions="Center" Margin="0,0,5,0" />
+                                <Label Text="12h" FontSize="Small" HorizontalOptions="Center" 
+                                       VerticalOptions="End" Margin="0,0,0,5" />
+                                <Label Text="18h" FontSize="Small" HorizontalOptions="Start" 
+                                       VerticalOptions="Center" Margin="5,0,0,0" />
+                                
+                                <!-- NCP marker -->
+                                <Ellipse Fill="White" WidthRequest="6" HeightRequest="6"
+                                         HorizontalOptions="Center" VerticalOptions="Center" />
+                            </Grid>
+                        </Frame>
+
+                        <Grid Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="2">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto" />
+                                <ColumnDefinition Width="*" />
+                            </Grid.ColumnDefinitions>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto" />
+                                <RowDefinition Height="Auto" />
+                            </Grid.RowDefinitions>
+
+                            <Label Grid.Row="0" Grid.Column="0" Text="Polaris Angle:" />
+                            <Label Grid.Row="0" Grid.Column="1" Text="{Binding PolarisAngle, StringFormat='{0:F1}°'}" />
+
+                            <Label Grid.Row="1" Grid.Column="0" Text="Polaris Offset:" />
+                            <Label Grid.Row="1" Grid.Column="1" Text="{Binding PolarisOffset, StringFormat='{0:F2}°'}" />
+                        </Grid>
+                    </Grid>
+
+                    <Button Text="Update Polar Alignment" 
+                            Command="{Binding UpdatePolarAlignmentCommand}" />
+                </VerticalStackLayout>
+            </Frame>
+
+            <!-- Exposure Calculator - 500 Rule -->
+            <Frame BorderColor="{DynamicResource Primary}" BackgroundColor="{DynamicResource SectionBackground}">
+                <VerticalStackLayout Spacing="10">
+                    <Label Text="Exposure Calculator" 
+                           FontSize="Medium" 
+                           FontAttributes="Bold" />
+
+                    <Grid ColumnDefinitions="Auto,*" RowDefinitions="Auto,Auto,Auto,Auto,Auto">
+                        <Label Grid.Row="0" Grid.Column="0" Text="Camera Type:" />
+                        <Picker Grid.Row="0" Grid.Column="1" 
+                                ItemsSource="{Binding SensorTypes}" 
+                                ItemDisplayBinding="{Binding Name}"
+                                SelectedItem="{Binding SelectedSensorType}">
+                            <Picker.Behaviors>
+                                <EventToCommandBehavior EventName="SelectedIndexChanged" 
+                                                       Command="{Binding SelectSensorTypeCommand}" 
+                                                       CommandParameter="{Binding SelectedItem, Source={RelativeSource Self}}" />
+                            </Picker.Behaviors>
+                        </Picker>
+
+                        <Label Grid.Row="1" Grid.Column="0" Text="Focal Length (mm):" />
+                        <HorizontalStackLayout Grid.Row="1" Grid.Column="1">
+                            <Slider Minimum="8" Maximum="800" Value="{Binding FocalLength}" 
+                                   MinimumTrackColor="{DynamicResource Primary}" 
+                                   MaximumTrackColor="{DynamicResource PrimaryDark}"
+                                   ThumbColor="{DynamicResource Primary}"
+                                   ValueChanged="OnSliderValueChanged"
+                                   HorizontalOptions="FillAndExpand" />
+                            <Entry Text="{Binding FocalLength, StringFormat='{0:F0}'}" 
+                                  WidthRequest="60" 
+                                  Keyboard="Numeric" />
+                        </HorizontalStackLayout>
+
+                        <Label Grid.Row="2" Grid.Column="0" Text="Aperture (f/):" />
+                        <HorizontalStackLayout Grid.Row="2" Grid.Column="1">
+                            <Slider Minimum="1.4" Maximum="22" Value="{Binding Aperture}" 
+                                   MinimumTrackColor="{DynamicResource Primary}" 
+                                   MaximumTrackColor="{DynamicResource PrimaryDark}"
+                                   ThumbColor="{DynamicResource Primary}"
+                                   ValueChanged="OnSliderValueChanged"
+                                   HorizontalOptions="FillAndExpand" />
+                            <Entry Text="{Binding Aperture, StringFormat='f/{0:F1}'}" 
+                                  WidthRequest="60" 
+                                  Keyboard="Numeric" />
+                        </HorizontalStackLayout>
+
+                        <Label Grid.Row="3" Grid.Column="0" Text="Crop Factor:" />
+                        <HorizontalStackLayout Grid.Row="3" Grid.Column="1">
+                            <Slider Minimum="1" Maximum="2.7" Value="{Binding CropFactor}" 
+                                   MinimumTrackColor="{DynamicResource Primary}" 
+                                   MaximumTrackColor="{DynamicResource PrimaryDark}"
+                                   ThumbColor="{DynamicResource Primary}"
+                                   ValueChanged="OnSliderValueChanged"
+                                   HorizontalOptions="FillAndExpand" />
+                            <Entry Text="{Binding CropFactor, StringFormat='{0:F1}x'}" 
+                                  WidthRequest="60" 
+                                  Keyboard="Numeric" />
+                        </HorizontalStackLayout>
+
+                        <Label Grid.Row="4" Grid.Column="0" Text="Pixel Pitch (μm):" />
+                        <HorizontalStackLayout Grid.Row="4" Grid.Column="1">
+                            <Slider Minimum="1.5" Maximum="10" Value="{Binding PixelPitch}" 
+                                   MinimumTrackColor="{DynamicResource Primary}" 
+                                   MaximumTrackColor="{DynamicResource PrimaryDark}"
+                                   ThumbColor="{DynamicResource Primary}"
+                                   ValueChanged="OnSliderValueChanged"
+                                   HorizontalOptions="FillAndExpand" />
+                            <Entry Text="{Binding PixelPitch, StringFormat='{0:F1}'}" 
+                                  WidthRequest="60" 
+                                  Keyboard="Numeric" />
+                        </HorizontalStackLayout>
+                    </Grid>
+
+                    <Button Text="Calculate" 
+                            Command="{Binding UpdateMaxExposureTimeCommand}" />
+
+                    <Grid ColumnDefinitions="Auto,*" RowDefinitions="Auto,Auto,Auto">
+                        <Label Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2" 
+                               Text="Results:" 
+                               FontAttributes="Bold" 
+                               Margin="0,10,0,5" />
+
+                        <Label Grid.Row="1" Grid.Column="0" Text="500 Rule:" />
+                        <Label Grid.Row="1" Grid.Column="1" Text="{Binding MaxExposureTime, StringFormat='{0:F1} seconds'}" />
+
+                        <Label Grid.Row="2" Grid.Column="0" Text="NPF Rule:" />
+                        <Label Grid.Row="2" Grid.Column="1" Text="{Binding NpfExposureTime, StringFormat='{0:F1} seconds'}" />
+                    </Grid>
+                </VerticalStackLayout>
+            </Frame>
+
+            <!-- Field of View Calculator -->
+            <Frame BorderColor="{DynamicResource Primary}" BackgroundColor="{DynamicResource SectionBackground}">
+                <VerticalStackLayout Spacing="10">
+                    <Label Text="Field of View" 
+                           FontSize="Medium" 
+                           FontAttributes="Bold" />
+
+                    <Grid ColumnDefinitions="Auto,*" RowDefinitions="Auto,Auto,Auto">
+                        <Label Grid.Row="0" Grid.Column="0" Text="Sensor Width (mm):" />
+                        <Entry Grid.Row="0" Grid.Column="1" 
+                              Text="{Binding SensorWidth}" 
+                              Keyboard="Numeric" />
+
+                        <Label Grid.Row="1" Grid.Column="0" Text="Sensor Height (mm):" />
+                        <Entry Grid.Row="1" Grid.Column="1" 
+                              Text="{Binding SensorHeight}" 
+                              Keyboard="Numeric" />
+
+                        <Label Grid.Row="2" Grid.Column="0" Text="Field of View:" />
+                        <Label Grid.Row="2" Grid.Column="1" 
+                              Text="{Binding FieldOfView, StringFormat='{0:F2}°'}" />
+                    </Grid>
+
+                    <Button Text="Calculate Crop Factor" 
+                            Command="{Binding CalculateCropFactorCommand}" />
+
+                    <Label Text="{Binding CalculatedCropFactor, StringFormat='Calculated Crop Factor: {0:F2}x'}" 
+                           IsVisible="{Binding CalculatedCropFactor, Converter={StaticResource DoubleToVisibleConverter}}" />
+                </VerticalStackLayout>
+            </Frame>
+
+            <!-- Error Message -->
+            <Label Text="{Binding ErrorMessage}" 
+                   IsVisible="{Binding HasError}" 
+                   TextColor="Red" 
+                   HorizontalOptions="Center" />
+        </VerticalStackLayout>
+    </ScrollView>
+</ContentPage>

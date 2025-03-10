@@ -1,0 +1,166 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:maps="clr-namespace:Mapsui.UI.Maui;assembly=Mapsui.UI.Maui"
+             xmlns:viewmodels="clr-namespace:AstroToolkit.ViewModels"
+             x:Class="AstroToolkit.Views.MapPage"
+             x:DataType="viewmodels:MapViewModel"
+             Title="{Binding Title}">
+
+    <Grid RowDefinitions="*,Auto" ColumnDefinitions="*">
+        <!-- Map View -->
+        <maps:MapView x:Name="mapView" Grid.Row="0" Grid.Column="0" />
+
+        <!-- Bottom Controls -->
+        <Grid Grid.Row="1" Grid.Column="0" Padding="10" RowDefinitions="Auto" ColumnDefinitions="*,Auto,Auto">
+            <!-- Toggle Light Pollution Layer Button -->
+            <Button Grid.Column="0" 
+                    Text="{Binding IsLightPollutionLayerVisible, Converter={StaticResource BoolToStringConverter}, ConverterParameter='Hide Light Pollution|Show Light Pollution'}"
+                    Command="{Binding ToggleLightPollutionLayerCommand}"
+                    Margin="0,0,5,0" />
+
+            <!-- Current Location Button -->
+            <Button Grid.Column="1" 
+                    Text="My Location" 
+                    Command="{Binding GetCurrentLocationCommand}" 
+                    Margin="5,0,5,0" />
+
+            <!-- Add New Spot Button -->
+            <Button Grid.Column="2" 
+                    Text="Add Spot" 
+                    Command="{Binding AddNewSpotCommand}" 
+                    Margin="5,0,0,0" />
+        </Grid>
+
+        <!-- Spot Detail Popup -->
+        <Frame Grid.Row="0" Grid.Column="0" 
+               VerticalOptions="End" 
+               Margin="10,0,10,70" 
+               Padding="15" 
+               BorderColor="{DynamicResource Primary}" 
+               BackgroundColor="{DynamicResource DarkBackground}"
+               IsVisible="{Binding SelectedSpot, Converter={StaticResource NotNullToBoolConverter}}">
+            <Grid RowDefinitions="Auto,Auto,Auto,Auto" ColumnDefinitions="*,Auto">
+                <!-- Spot Name and Rating -->
+                <VerticalStackLayout Grid.Row="0" Grid.Column="0">
+                    <Label Text="{Binding SelectedSpot.Name}" 
+                           FontSize="Large" 
+                           TextColor="{DynamicResource PrimaryText}" />
+                    
+                    <!-- Rating Stars -->
+                    <HorizontalStackLayout Spacing="5">
+                        <Label Text="Rating:" />
+                        <HorizontalStackLayout x:Name="RatingStars" />
+                    </HorizontalStackLayout>
+                </VerticalStackLayout>
+
+                <!-- Close Button -->
+                <Button Grid.Row="0" Grid.Column="1" 
+                        Text="×" 
+                        Command="{Binding CancelAddSpotCommand}" 
+                        HeightRequest="30" 
+                        WidthRequest="30" 
+                        Padding="0" 
+                        FontSize="20" />
+
+                <!-- Description -->
+                <Label Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2"
+                       Text="{Binding SelectedSpot.Description}" 
+                       Margin="0,10" />
+
+                <!-- Light Pollution Level -->
+                <Label Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="2"
+                       Text="{Binding SelectedSpot.LightPollutionLevel, StringFormat='Light Pollution Level: {0} (Bortle Scale)'}" 
+                       Margin="0,0,0,10" />
+
+                <!-- Buttons -->
+                <HorizontalStackLayout Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="2" 
+                                      Spacing="10">
+                    <Button Text="Save" 
+                            Command="{Binding SaveSpotCommand}" 
+                            IsVisible="{Binding IsAddingNewSpot}" />
+                    
+                    <Button Text="Navigate" 
+                            Command="{Binding NavigateToSpotCommand}" 
+                            CommandParameter="{Binding SelectedSpot}"
+                            IsVisible="{Binding IsAddingNewSpot, Converter={StaticResource InvertedBoolConverter}}" />
+                    
+                    <Button Text="Details" 
+                            Command="{Binding ViewSpotDetailCommand}" 
+                            CommandParameter="{Binding SelectedSpot}"
+                            IsVisible="{Binding IsAddingNewSpot, Converter={StaticResource InvertedBoolConverter}}" />
+                    
+                    <Button Text="Delete" 
+                            Command="{Binding DeleteSpotCommand}" 
+                            CommandParameter="{Binding SelectedSpot}"
+                            BackgroundColor="Red" 
+                            IsVisible="{Binding IsAddingNewSpot, Converter={StaticResource InvertedBoolConverter}}" />
+                </HorizontalStackLayout>
+            </Grid>
+        </Frame>
+
+        <!-- Add/Edit Spot Form -->
+        <Frame Grid.Row="0" Grid.Column="0" 
+               VerticalOptions="Center" 
+               HorizontalOptions="Center" 
+               Padding="20" 
+               BorderColor="{DynamicResource Primary}" 
+               BackgroundColor="{DynamicResource DarkBackground}"
+               IsVisible="{Binding IsAddingNewSpot}">
+            <VerticalStackLayout Spacing="15" MinimumWidthRequest="300">
+                <Label Text="Add New Astrophotography Spot" 
+                       FontSize="Large" 
+                       HorizontalOptions="Center"
+                       TextColor="{DynamicResource PrimaryText}" />
+
+                <Entry Placeholder="Spot Name" 
+                       Text="{Binding SelectedSpot.Name}" />
+
+                <Editor Placeholder="Description" 
+                        Text="{Binding SelectedSpot.Description}" 
+                        HeightRequest="100" />
+
+                <Grid ColumnDefinitions="*, Auto">
+                    <Picker Grid.Column="0" 
+                            Title="Light Pollution Level (Bortle)" 
+                            SelectedItem="{Binding SelectedSpot.LightPollutionLevel}" 
+                            ItemsSource="{Binding BortleScaleOptions}" />
+                    <Label Grid.Column="1" 
+                           Text="?" 
+                           FontSize="18"
+                           VerticalOptions="Center" />
+                </Grid>
+
+                <Button Text="Add Photo" 
+                        Command="{Binding AddPhotoCommand}" />
+
+                <HorizontalStackLayout Spacing="10">
+                    <Button Text="Save" 
+                            Command="{Binding SaveSpotCommand}" 
+                            HorizontalOptions="FillAndExpand" />
+                    <Button Text="Cancel" 
+                            Command="{Binding CancelAddSpotCommand}" 
+                            HorizontalOptions="FillAndExpand" />
+                </HorizontalStackLayout>
+            </VerticalStackLayout>
+        </Frame>
+
+        <!-- Loading Indicator -->
+        <ActivityIndicator Grid.Row="0" Grid.Column="0" 
+                           IsRunning="{Binding IsBusy}" 
+                           IsVisible="{Binding IsBusy}" 
+                           HorizontalOptions="Center" 
+                           VerticalOptions="Center" />
+
+        <!-- Error Message -->
+        <Label Grid.Row="0" Grid.Column="0" 
+               Text="{Binding ErrorMessage}" 
+               IsVisible="{Binding HasError}" 
+               TextColor="Red" 
+               HorizontalOptions="Center" 
+               VerticalOptions="Center"
+               BackgroundColor="{DynamicResource TertiaryColor}" 
+               Opacity="0.8" 
+               Padding="10" />
+    </Grid>
+</ContentPage>

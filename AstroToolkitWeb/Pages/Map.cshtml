@@ -1,0 +1,680 @@
+@page
+@model MapModel
+@{
+    ViewData["Title"] = "Map";
+}
+
+<div class="container-fluid px-0">
+    <div class="map-container">
+        <div id="map" class="map-canvas"></div>
+        
+        <div class="map-overlay-container">
+            <div class="card map-controls">
+                <div class="card-header bg-dark text-white">
+                    <h5 class="mb-0">
+                        <i class="bi bi-map"></i> Dark Sky Map
+                    </h5>
+                </div>
+                <div class="card-body">
+                    <div class="mb-3">
+                        <label for="searchAddress" class="form-label">Search Location</label>
+                        <div class="input-group">
+                            <input type="text" class="form-control" id="searchAddress" placeholder="Enter city, address...">
+                            <button class="btn btn-primary" type="button" id="searchButton">
+                                <i class="bi bi-search"></i>
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label class="form-label d-block">Map Layers</label>
+                        <div class="form-check form-switch">
+                            <input class="form-check-input" type="checkbox" id="lightPollutionToggle" checked>
+                            <label class="form-check-label" for="lightPollutionToggle">
+                                Light Pollution
+                            </label>
+                        </div>
+                        <div class="form-check form-switch">
+                            <input class="form-check-input" type="checkbox" id="communitySpotToggle" checked>
+                            <label class="form-check-label" for="communitySpotToggle">
+                                Community Spots
+                            </label>
+                        </div>
+                    </div>
+                    
+                    <div class="d-grid">
+                        <button id="addSpotBtn" class="btn btn-success">
+                            <i class="bi bi-plus-circle"></i> Add New Spot
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Spot Details Slide Panel -->
+        <div class="spot-details-panel" id="spotDetailsPanel">
+            <div class="card">
+                <div class="card-header bg-dark text-white d-flex justify-content-between align-items-center">
+                    <h5 class="mb-0" id="spotName">Spot Details</h5>
+                    <button type="button" class="btn-close btn-close-white" id="closeSpotDetails"></button>
+                </div>
+                <div class="card-body">
+                    <div id="spotContent">
+                        <div class="mb-3">
+                            <span class="badge bg-info" id="spotLightPollution">Light Pollution: 3</span>
+                            <span class="badge bg-secondary" id="spotElevation">Elevation: 250m</span>
+                        </div>
+                        
+                        <div class="mb-3" id="spotRating">
+                            <small class="text-muted">Rating:</small>
+                            <div class="star-rating">
+                                <i class="bi bi-star-fill text-warning"></i>
+                                <i class="bi bi-star-fill text-warning"></i>
+                                <i class="bi bi-star-fill text-warning"></i>
+                                <i class="bi bi-star-fill text-warning"></i>
+                                <i class="bi bi-star text-warning"></i>
+                            </div>
+                        </div>
+                        
+                        <p class="mb-3" id="spotDescription">
+                            This is an excellent dark sky site with minimal light pollution. The horizon is fairly clear with good views in all directions.
+                        </p>
+                        
+                        <div class="mb-3" id="spotPhotos">
+                            <h6>Photos</h6>
+                            <div class="row g-2">
+                                <div class="col-4">
+                                    <img src="/images/placeholder-image.jpg" class="img-thumbnail" alt="Spot photo">
+                                </div>
+                                <div class="col-4">
+                                    <img src="/images/placeholder-image.jpg" class="img-thumbnail" alt="Spot photo">
+                                </div>
+                                <div class="col-4">
+                                    <img src="/images/placeholder-image.jpg" class="img-thumbnail" alt="Spot photo">
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="d-flex justify-content-between">
+                            <button class="btn btn-info btn-sm" id="checkWeatherBtn">
+                                <i class="bi bi-cloud-sun"></i> Check Weather
+                            </button>
+                            <button class="btn btn-primary btn-sm" id="driveDirectionsBtn">
+                                <i class="bi bi-compass"></i> Directions
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Add New Spot Modal -->
+        <div class="modal fade" id="addSpotModal" tabindex="-1" aria-labelledby="addSpotModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="addSpotModalLabel">Add New Observation Spot</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <form id="addSpotForm">
+                            <div class="mb-3">
+                                <label for="newSpotName" class="form-label">Name</label>
+                                <input type="text" class="form-control" id="newSpotName" required>
+                            </div>
+                            <div class="mb-3">
+                                <label for="newSpotDescription" class="form-label">Description</label>
+                                <textarea class="form-control" id="newSpotDescription" rows="3" required></textarea>
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label">Location</label>
+                                <div class="input-group mb-2">
+                                    <span class="input-group-text">Lat</span>
+                                    <input type="text" class="form-control" id="newSpotLat" readonly>
+                                    <span class="input-group-text">Lng</span>
+                                    <input type="text" class="form-control" id="newSpotLng" readonly>
+                                </div>
+                                <small class="form-text text-muted">Click on the map to select location</small>
+                            </div>
+                            <div class="mb-3">
+                                <label for="newSpotRating" class="form-label">Rating</label>
+                                <div class="rating-input">
+                                    <i class="bi bi-star rating-star" data-rating="1"></i>
+                                    <i class="bi bi-star rating-star" data-rating="2"></i>
+                                    <i class="bi bi-star rating-star" data-rating="3"></i>
+                                    <i class="bi bi-star rating-star" data-rating="4"></i>
+                                    <i class="bi bi-star rating-star" data-rating="5"></i>
+                                </div>
+                                <input type="hidden" id="newSpotRating" value="0">
+                            </div>
+                            <div class="mb-3">
+                                <label for="newSpotPhotos" class="form-label">Photos</label>
+                                <input type="file" class="form-control" id="newSpotPhotos" multiple accept="image/*">
+                            </div>
+                        </form>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                        <button type="button" class="btn btn-primary" id="saveSpotBtn">Save Spot</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Styles {
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.8.1/font/bootstrap-icons.css">
+    <style>
+        .map-container {
+            position: relative;
+            height: calc(100vh - 156px);
+            min-height: 500px;
+        }
+        
+        .map-canvas {
+            width: 100%;
+            height: 100%;
+        }
+        
+        .map-overlay-container {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            z-index: 1000;
+            max-width: 350px;
+        }
+        
+        .map-controls {
+            box-shadow: 0 0 20px rgba(0,0,0,0.3);
+        }
+        
+        .spot-details-panel {
+            position: absolute;
+            bottom: 0;
+            right: 0;
+            width: 100%;
+            max-width: 400px;
+            z-index: 1000;
+            margin: 20px;
+            transform: translateY(100%);
+            transition: transform 0.3s ease-in-out;
+            box-shadow: 0 0 20px rgba(0,0,0,0.3);
+        }
+        
+        .spot-details-panel.active {
+            transform: translateY(0);
+        }
+        
+        .star-rating {
+            font-size: 1.2rem;
+        }
+        
+        .rating-input {
+            font-size: 1.5rem;
+            cursor: pointer;
+        }
+        
+        .rating-star {
+            color: #ccc;
+        }
+        
+        .rating-star.active {
+            color: #ffc107;
+        }
+        
+        @@media (max-width: 768px) {
+            .map-overlay-container {
+                max-width: 80%;
+            }
+            
+            .spot-details-panel {
+                max-width: 90%;
+                margin: 10px;
+            }
+        }
+    </style>
+}
+
+@section Scripts {
+    <script src="https://maps.googleapis.com/maps/api/js?key=@Model.MapsApiKey&callback=initMap" async defer></script>
+    <script>
+        let map;
+        let lightPollutionLayer;
+        let markers = [];
+        let selectedMarker = null;
+        let addingSpotMode = false;
+        let tempMarker = null;
+        
+        function initMap() {
+            // Initialize map centered on default location
+            map = new google.maps.Map(document.getElementById('map'), {
+                center: { lat: 37.7749, lng: -122.4194 },
+                zoom: 8,
+                mapTypeId: 'terrain',
+                styles: [
+                    { 
+                        featureType: 'all', 
+                        elementType: 'labels.text.fill', 
+                        stylers: [{ color: '#ffffff' }] 
+                    }
+                ]
+            });
+            
+            // Try to get user's location
+            if (navigator.geolocation) {
+                navigator.geolocation.getCurrentPosition(
+                    (position) => {
+                        const pos = {
+                            lat: position.coords.latitude,
+                            lng: position.coords.longitude
+                        };
+                        map.setCenter(pos);
+                        
+                        // Add "my location" marker
+                        new google.maps.Marker({
+                            position: pos,
+                            map: map,
+                            icon: {
+                                path: google.maps.SymbolPath.CIRCLE,
+                                scale: 8,
+                                fillColor: "#4285F4",
+                                fillOpacity: 1,
+                                strokeColor: "#ffffff",
+                                strokeWeight: 2
+                            },
+                            title: "My Location"
+                        });
+                    },
+                    () => {
+                        console.log("Error getting user location");
+                    }
+                );
+            }
+            
+            // Load the light pollution layer
+            loadLightPollutionLayer();
+            
+            // Load the community spots
+            loadCommunitySpots();
+            
+            // Set up map click event
+            map.addListener('click', function(event) {
+                if (addingSpotMode) {
+                    placeTemporaryMarker(event.latLng);
+                    document.getElementById('newSpotLat').value = event.latLng.lat().toFixed(6);
+                    document.getElementById('newSpotLng').value = event.latLng.lng().toFixed(6);
+                    $('#addSpotModal').modal('show');
+                }
+            });
+            
+            // Set up UI event listeners
+            setupEventListeners();
+        }
+        
+        function loadLightPollutionLayer() {
+            // Placeholder for light pollution layer
+            // This would be replaced with actual implementation
+            console.log("Loading light pollution layer");
+        }
+        
+        function loadCommunitySpots() {
+            // Load spots from the API
+            fetch('/api/spots')
+                .then(response => response.json())
+                .then(spots => {
+                    spots.forEach(spot => addSpotMarker(spot));
+                })
+                .catch(error => {
+                    console.error('Error loading spots:', error);
+                    
+                    // For demo purposes only - would be replaced with actual API data
+                    const demoSpots = [
+                        {
+                            id: 1,
+                            name: "Mt. Tam",
+                            description: "Great dark sky site north of San Francisco. Minimal light pollution and excellent view of the Milky Way.",
+                            latitude: 37.9236,
+                            longitude: -122.5964,
+                            lightPollutionLevel: 3,
+                            rating: 5
+                        },
+                        {
+                            id: 2,
+                            name: "Pinnacles National Park",
+                            description: "One of the darkest places in central California. Amazing stargazing spot with good facilities.",
+                            latitude: 36.4906,
+                            longitude: -121.1825,
+                            lightPollutionLevel: 2,
+                            rating: 4
+                        }
+                    ];
+                    
+                    demoSpots.forEach(spot => addSpotMarker(spot));
+                });
+        }
+        
+        function addSpotMarker(spot) {
+            const marker = new google.maps.Marker({
+                position: { lat: spot.latitude, lng: spot.longitude },
+                map: map,
+                title: spot.name,
+                icon: {
+                    path: google.maps.SymbolPath.CIRCLE,
+                    scale: 10,
+                    fillColor: getLightPollutionColor(spot.lightPollutionLevel),
+                    fillOpacity: 0.7,
+                    strokeColor: "#ffffff",
+                    strokeWeight: 2
+                }
+            });
+            
+            marker.spotData = spot;
+            
+            marker.addListener('click', function() {
+                showSpotDetails(marker);
+            });
+            
+            markers.push(marker);
+        }
+        
+        function getLightPollutionColor(level) {
+            const colors = [
+                "#000000", // Level 1 - Bortle 1 (black)
+                "#1a237e", // Level 2 - Bortle 2-3 (dark blue)
+                "#0d47a1", // Level 3 - Bortle 4 (blue)
+                "#2e7d32", // Level 4 - Bortle 5 (green)
+                "#f57f17", // Level 5 - Bortle 6 (orange)
+                "#d32f2f", // Level 6 - Bortle 7 (red)
+                "#b71c1c", // Level 7 - Bortle 8 (bright red)
+                "#880e4f"  // Level 8 - Bortle 9 (magenta)
+            ];
+            
+            return colors[Math.min(level - 1, colors.length - 1)];
+        }
+        
+        function showSpotDetails(marker) {
+            selectedMarker = marker;
+            const spot = marker.spotData;
+            
+            // Populate details panel
+            document.getElementById('spotName').textContent = spot.name;
+            document.getElementById('spotLightPollution').textContent = `Light Pollution: ${spot.lightPollutionLevel}`;
+            document.getElementById('spotDescription').textContent = spot.description;
+            
+            // Set rating stars
+            const ratingContainer = document.getElementById('spotRating');
+            ratingContainer.innerHTML = '<small class="text-muted">Rating:</small><div class="star-rating">';
+            for (let i = 1; i <= 5; i++) {
+                ratingContainer.querySelector(".star-rating").innerHTML += `
+                    <i class="bi bi-star${i <= spot.rating ? '-fill' : ''} text-warning"></i>
+                `;
+            }
+            ratingContainer.innerHTML += '</div>';
+            
+            // Show the panel
+            document.getElementById('spotDetailsPanel').classList.add('active');
+        }
+        
+        function placeTemporaryMarker(location) {
+            if (tempMarker) {
+                tempMarker.setMap(null);
+            }
+            
+            tempMarker = new google.maps.Marker({
+                position: location,
+                map: map,
+                icon: {
+                    path: google.maps.SymbolPath.CIRCLE,
+                    scale: 10,
+                    fillColor: "#4285F4",
+                    fillOpacity: 0.5,
+                    strokeColor: "#ffffff",
+                    strokeWeight: 2
+                },
+                draggable: true
+            });
+            
+            tempMarker.addListener('dragend', function() {
+                const pos = tempMarker.getPosition();
+                document.getElementById('newSpotLat').value = pos.lat().toFixed(6);
+                document.getElementById('newSpotLng').value = pos.lng().toFixed(6);
+            });
+        }
+        
+        function setupEventListeners() {
+            // Add spot button
+            document.getElementById('addSpotBtn').addEventListener('click', function() {
+                addingSpotMode = true;
+                showToast('Click on the map to place your observation spot', 'info');
+            });
+            
+            // Close spot details
+            document.getElementById('closeSpotDetails').addEventListener('click', function() {
+                document.getElementById('spotDetailsPanel').classList.remove('active');
+                selectedMarker = null;
+            });
+            
+            // Save new spot
+            document.getElementById('saveSpotBtn').addEventListener('click', function() {
+                saveNewSpot();
+            });
+            
+            // Layer toggles
+            document.getElementById('lightPollutionToggle').addEventListener('change', function() {
+                // Toggle light pollution layer visibility
+                console.log("Light pollution toggled:", this.checked);
+            });
+            
+            document.getElementById('communitySpotToggle').addEventListener('change', function() {
+                // Toggle community spots visibility
+                markers.forEach(marker => {
+                    marker.setVisible(this.checked);
+                });
+            });
+            
+            // Rating input handling
+            document.querySelectorAll('.rating-star').forEach(function(star) {
+                star.addEventListener('click', function() {
+                    const rating = parseInt(this.getAttribute('data-rating'));
+                    document.getElementById('newSpotRating').value = rating;
+                    
+                    document.querySelectorAll('.rating-star').forEach(function(s, index) {
+                        if (index < rating) {
+                            s.classList.add('active');
+                            s.classList.remove('bi-star');
+                            s.classList.add('bi-star-fill');
+                        } else {
+                            s.classList.remove('active');
+                            s.classList.remove('bi-star-fill');
+                            s.classList.add('bi-star');
+                        }
+                    });
+                });
+            });
+            
+            // Check weather button
+            document.getElementById('checkWeatherBtn').addEventListener('click', function() {
+                if (selectedMarker) {
+                    const spot = selectedMarker.spotData;
+                    window.location.href = `/Weather?lat=${spot.latitude}&lng=${spot.longitude}`;
+                }
+            });
+            
+            // Search button
+            document.getElementById('searchButton').addEventListener('click', function() {
+                const address = document.getElementById('searchAddress').value;
+                if (address) {
+                    geocodeAddress(address);
+                }
+            });
+            
+            // Search input - add enter key support
+            document.getElementById('searchAddress').addEventListener('keypress', function(e) {
+                if (e.key === 'Enter') {
+                    document.getElementById('searchButton').click();
+                }
+            });
+        }
+        
+        function geocodeAddress(address) {
+            const geocoder = new google.maps.Geocoder();
+            geocoder.geocode({ address: address }, function(results, status) {
+                if (status === 'OK') {
+                    map.setCenter(results[0].geometry.location);
+                    map.setZoom(10);
+                    
+                    // Add temporary marker
+                    new google.maps.Marker({
+                        map: map,
+                        position: results[0].geometry.location,
+                        animation: google.maps.Animation.DROP,
+                        icon: {
+                            path: google.maps.SymbolPath.CIRCLE,
+                            scale: 8,
+                            fillColor: "#4285F4",
+                            fillOpacity: 1,
+                            strokeColor: "#ffffff",
+                            strokeWeight: 2
+                        }
+                    });
+                } else {
+                    showToast('Could not find location: ' + status, 'error');
+                }
+            });
+        }
+        
+        function saveNewSpot() {
+            const nameInput = document.getElementById('newSpotName');
+            const descInput = document.getElementById('newSpotDescription');
+            const ratingInput = document.getElementById('newSpotRating');
+            const latInput = document.getElementById('newSpotLat');
+            const lngInput = document.getElementById('newSpotLng');
+            
+            if (!nameInput.value || !descInput.value || !latInput.value || !lngInput.value) {
+                showToast('Please fill in all required fields', 'error');
+                return;
+            }
+            
+            const newSpot = {
+                name: nameInput.value,
+                description: descInput.value,
+                rating: parseInt(ratingInput.value) || 3,
+                latitude: parseFloat(latInput.value),
+                longitude: parseFloat(lngInput.value),
+                lightPollutionLevel: 3 // This would be determined by the light pollution map
+            };
+            
+            // Submit to API
+            fetch('/api/spots', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(newSpot)
+            })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                return response.json();
+            })
+            .then(savedSpot => {
+                // Add marker for the new spot
+                if (tempMarker) {
+                    tempMarker.setMap(null);
+                    tempMarker = null;
+                }
+                
+                addSpotMarker(savedSpot);
+                $('#addSpotModal').modal('hide');
+                showToast('Spot added successfully!', 'success');
+                
+                // Reset form
+                document.getElementById('addSpotForm').reset();
+                document.querySelectorAll('.rating-star').forEach(function(s) {
+                    s.classList.remove('active');
+                    s.classList.remove('bi-star-fill');
+                    s.classList.add('bi-star');
+                });
+            })
+            .catch(error => {
+                console.error('Error saving spot:', error);
+                showToast('Error adding spot. Please try again.', 'error');
+                
+                // For demo only - would be replaced with actual API
+                console.log("Demo mode: Adding spot locally");
+                const demoId = Date.now();
+                newSpot.id = demoId;
+                
+                if (tempMarker) {
+                    tempMarker.setMap(null);
+                    tempMarker = null;
+                }
+                
+                addSpotMarker(newSpot);
+                $('#addSpotModal').modal('hide');
+                showToast('Spot added successfully!', 'success');
+                
+                // Reset form
+                document.getElementById('addSpotForm').reset();
+                document.querySelectorAll('.rating-star').forEach(function(s) {
+                    s.classList.remove('active');
+                    s.classList.remove('bi-star-fill');
+                    s.classList.add('bi-star');
+                });
+            });
+            
+            addingSpotMode = false;
+        }
+        
+        function showToast(message, type = 'info') {
+            // Create toast container if it doesn't exist
+            let toastContainer = document.querySelector('.toast-container');
+            if (!toastContainer) {
+                toastContainer = document.createElement('div');
+                toastContainer.className = 'toast-container position-fixed bottom-0 end-0 p-3';
+                document.body.appendChild(toastContainer);
+            }
+            
+            // Create a unique ID for this toast
+            const toastId = 'toast-' + Date.now();
+            
+            // Determine toast background class
+            let bgClass = 'bg-info';
+            if (type === 'success') bgClass = 'bg-success';
+            if (type === 'error') bgClass = 'bg-danger';
+            if (type === 'warning') bgClass = 'bg-warning';
+            
+            // Create the toast HTML
+            const toastHtml = `
+                <div id="${toastId}" class="toast" role="alert" aria-live="assertive" aria-atomic="true">
+                    <div class="toast-header ${bgClass} text-white">
+                        <strong class="me-auto">AstroToolkit</strong>
+                        <small>Just now</small>
+                        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="toast" aria-label="Close"></button>
+                    </div>
+                    <div class="toast-body">
+                        ${message}
+                    </div>
+                </div>
+            `;
+            
+            // Add the toast to the container
+            toastContainer.innerHTML += toastHtml;
+            
+            // Initialize and show the toast
+            const toastElement = document.getElementById(toastId);
+            const toast = new bootstrap.Toast(toastElement, {
+                autohide: true,
+                delay: 5000
+            });
+            toast.show();
+            
+            // Remove toast from DOM after it's hidden
+            toastElement.addEventListener('hidden.bs.toast', function () {
+                toastElement.remove();
+            });
+        }
+    </script>
+}

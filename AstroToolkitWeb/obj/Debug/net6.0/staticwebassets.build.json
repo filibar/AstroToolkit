@@ -1,0 +1,54 @@
+{
+  "Version": 1,
+  "Hash": "SVe9AiA9pdke1A6nnR8/fz4e3V1bUlQ7xmDhJ3BxxX8=",
+  "Source": "AstroToolkitWeb",
+  "BasePath": "_content/AstroToolkitWeb",
+  "Mode": "Default",
+  "ManifestType": "Build",
+  "ReferencedProjectsConfiguration": [],
+  "DiscoveryPatterns": [
+    {
+      "Name": "AstroToolkitWeb/wwwroot",
+      "Source": "AstroToolkitWeb",
+      "ContentRoot": "/home/runner/workspace/AstroToolkitWeb/wwwroot/",
+      "BasePath": "_content/AstroToolkitWeb",
+      "Pattern": "**"
+    }
+  ],
+  "Assets": [
+    {
+      "Identity": "/home/runner/workspace/AstroToolkitWeb/wwwroot/css/site.css",
+      "SourceId": "AstroToolkitWeb",
+      "SourceType": "Discovered",
+      "ContentRoot": "/home/runner/workspace/AstroToolkitWeb/wwwroot/",
+      "BasePath": "_content/AstroToolkitWeb",
+      "RelativePath": "css/site.css",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot/css/site.css"
+    },
+    {
+      "Identity": "/home/runner/workspace/AstroToolkitWeb/wwwroot/js/site.js",
+      "SourceId": "AstroToolkitWeb",
+      "SourceType": "Discovered",
+      "ContentRoot": "/home/runner/workspace/AstroToolkitWeb/wwwroot/",
+      "BasePath": "_content/AstroToolkitWeb",
+      "RelativePath": "js/site.js",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot/js/site.js"
+    }
+  ]
+}

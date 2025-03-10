@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<Shell
+    x:Class="AstroToolkit.AppShell"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:local="clr-namespace:AstroToolkit"
+    xmlns:views="clr-namespace:AstroToolkit.Views"
+    Shell.FlyoutBehavior="Disabled"
+    BackgroundColor="{DynamicResource DarkBackground}"
+    ForegroundColor="{DynamicResource PrimaryText}">
+
+    <TabBar>
+        <Tab Title="Map" Icon="map_icon.png">
+            <ShellContent ContentTemplate="{DataTemplate views:MapPage}" />
+        </Tab>
+        <Tab Title="Weather" Icon="weather_icon.png">
+            <ShellContent ContentTemplate="{DataTemplate views:WeatherPage}" />
+        </Tab>
+        <Tab Title="Tools" Icon="tools_icon.png">
+            <ShellContent ContentTemplate="{DataTemplate views:ToolsPage}" />
+        </Tab>
+    </TabBar>
+
+</Shell>

@@ -1,0 +1,41 @@
+@page
+@model ErrorModel
+@{
+    ViewData["Title"] = "Error";
+}
+
+<div class="container py-5">
+    <div class="text-center mb-5">
+        <h1 class="display-4">Oops!</h1>
+        <p class="lead">Something went wrong.</p>
+    </div>
+
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card">
+                <div class="card-body">
+                    @if (Model.ShowRequestId)
+                    {
+                        <div class="alert alert-info">
+                            <strong>Request ID:</strong> <code>@Model.RequestId</code>
+                        </div>
+                    }
+
+                    <h4>Error Details</h4>
+                    <p>
+                        We're sorry, but an error occurred while processing your request. Our team has been notified and we're working to fix the issue.
+                    </p>
+
+                    <div class="mt-4">
+                        <h5>You can try:</h5>
+                        <ul>
+                            <li>Refreshing the page</li>
+                            <li>Going back to the <a href="/">homepage</a></li>
+                            <li>Trying again later</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

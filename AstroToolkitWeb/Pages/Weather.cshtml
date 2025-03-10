@@ -1,0 +1,683 @@
+@page
+@model WeatherModel
+@{
+    ViewData["Title"] = "Astro Weather";
+}
+
+<div class="container">
+    <h1 class="mb-4">Astronomy Weather Forecast</h1>
+    
+    <div class="row mb-4">
+        <div class="col-md-6">
+            <div class="card h-100">
+                <div class="card-header">
+                    <h5 class="mb-0">Location</h5>
+                </div>
+                <div class="card-body">
+                    <div class="mb-4">
+                        <div class="input-group">
+                            <input type="text" class="form-control" id="location-input" placeholder="Enter a location">
+                            <button class="btn btn-primary" type="button" id="location-search">Search</button>
+                        </div>
+                    </div>
+                    
+                    <p class="mb-1">
+                        <strong>Current Location:</strong> 
+                        <span id="current-location">Detecting your location...</span>
+                    </p>
+                    <p>
+                        <small class="text-muted">
+                            <i class="bi bi-info-circle"></i> 
+                            Weather data is provided for your current location or a location you search for.
+                        </small>
+                    </p>
+                    
+                    <div class="d-grid gap-2 mt-4">
+                        <button class="btn btn-outline-primary" id="use-my-location">
+                            <i class="bi bi-geo-alt"></i> Use My Current Location
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-md-6">
+            <div class="card h-100">
+                <div class="card-header">
+                    <h5 class="mb-0">Moon Phase</h5>
+                </div>
+                <div class="card-body text-center">
+                    <div class="row align-items-center">
+                        <div class="col-5">
+                            <img src="/images/moon/placeholder.svg" alt="Moon Phase" id="moon-phase-image" class="img-fluid" style="max-width: 100px;">
+                        </div>
+                        <div class="col-7 text-start">
+                            <h4 id="moon-phase-name">Loading...</h4>
+                            <p class="mb-1">
+                                <span id="moon-illumination">-</span>% illuminated
+                            </p>
+                            <p class="mb-1">
+                                Age: <span id="moon-age">-</span> days
+                            </p>
+                            <p class="mb-0">
+                                <span class="badge bg-secondary" id="moon-astro-rating">Astronomy Rating: -/5</span>
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="row mb-4">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header">
+                    <h5 class="mb-0">Current Conditions</h5>
+                </div>
+                <div class="card-body">
+                    <div class="row align-items-center">
+                        <div class="col-md-2 text-center">
+                            <img src="/images/weather/placeholder.svg" alt="Weather Icon" id="weather-icon" class="img-fluid mb-2" style="max-width: 80px;">
+                            <h5 id="current-temp">-°C</h5>
+                        </div>
+                        <div class="col-md-3">
+                            <p class="mb-1">
+                                <strong>Condition:</strong> <span id="weather-description">-</span>
+                            </p>
+                            <p class="mb-1">
+                                <strong>Humidity:</strong> <span id="humidity">-</span>%
+                            </p>
+                            <p class="mb-1">
+                                <strong>Wind:</strong> <span id="wind-speed">-</span> km/h
+                            </p>
+                            <p class="mb-0">
+                                <strong>Pressure:</strong> <span id="pressure">-</span> hPa
+                            </p>
+                        </div>
+                        <div class="col-md-3">
+                            <p class="mb-1">
+                                <strong>Cloud Cover:</strong> <span id="cloud-cover">-</span>%
+                            </p>
+                            <p class="mb-1">
+                                <strong>Visibility:</strong> <span id="visibility">-</span> km
+                            </p>
+                            <p class="mb-1">
+                                <strong>Dew Point:</strong> <span id="dew-point">-</span>°C
+                            </p>
+                            <p class="mb-0">
+                                <strong>Precipitation:</strong> <span id="precipitation">-</span>%
+                            </p>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="card bg-light">
+                                <div class="card-body text-center">
+                                    <h5 class="card-title">Astro Viewing Quality</h5>
+                                    <div class="display-4 mb-2" id="viewing-score">-/5</div>
+                                    <p class="card-text" id="viewing-recommendation">Loading recommendation...</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="row mb-4">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header d-flex justify-content-between align-items-center">
+                    <h5 class="mb-0">5-Day Forecast</h5>
+                    <div class="form-check form-switch">
+                        <input class="form-check-input" type="checkbox" id="astro-view-switch" checked>
+                        <label class="form-check-label" for="astro-view-switch">Astronomy View</label>
+                    </div>
+                </div>
+                <div class="card-body p-0">
+                    <div class="table-responsive">
+                        <table class="table table-hover mb-0">
+                            <thead>
+                                <tr>
+                                    <th>Date</th>
+                                    <th>Conditions</th>
+                                    <th>Temperature</th>
+                                    <th>Cloud Cover</th>
+                                    <th>Humidity</th>
+                                    <th>Moon Phase</th>
+                                    <th>Viewing Score</th>
+                                </tr>
+                            </thead>
+                            <tbody id="forecast-table-body">
+                                <tr>
+                                    <td colspan="7" class="text-center py-3">
+                                        <div class="spinner-border text-primary" role="status">
+                                            <span class="visually-hidden">Loading...</span>
+                                        </div>
+                                        <p class="mt-2 mb-0">Loading forecast data...</p>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="row">
+        <div class="col-md-6">
+            <div class="card mb-4">
+                <div class="card-header">
+                    <h5 class="mb-0">Sunrise & Sunset</h5>
+                </div>
+                <div class="card-body">
+                    <div class="row text-center">
+                        <div class="col-6">
+                            <i class="bi bi-sunrise text-warning" style="font-size: 2rem;"></i>
+                            <h5 class="mt-2">Sunrise</h5>
+                            <p id="sunrise-time" class="lead">--:-- AM</p>
+                        </div>
+                        <div class="col-6">
+                            <i class="bi bi-sunset text-danger" style="font-size: 2rem;"></i>
+                            <h5 class="mt-2">Sunset</h5>
+                            <p id="sunset-time" class="lead">--:-- PM</p>
+                        </div>
+                    </div>
+                    <div class="mt-3">
+                        <p class="mb-1">
+                            <strong>Astronomical Twilight Ends:</strong> <span id="astro-twilight">--:-- PM</span>
+                        </p>
+                        <p class="mb-0">
+                            <small class="text-muted">
+                                <i class="bi bi-info-circle"></i> 
+                                Astronomical twilight ends when the sun is 18° below the horizon, ideal for dark sky viewing.
+                            </small>
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-md-6">
+            <div class="card mb-4">
+                <div class="card-header">
+                    <h5 class="mb-0">Observation Tips</h5>
+                </div>
+                <div class="card-body">
+                    <div id="observation-tips">
+                        <div class="d-flex align-items-center mb-3">
+                            <div class="spinner-border spinner-border-sm text-primary me-2" role="status">
+                                <span class="visually-hidden">Loading...</span>
+                            </div>
+                            <span>Generating tips based on weather conditions...</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        // Global variables
+        let currentLat = null;
+        let currentLon = null;
+        let weatherData = null;
+        let forecastData = null;
+        
+        // Initialize when document is ready
+        document.addEventListener('DOMContentLoaded', function() {
+            // Try to get user's location
+            if (navigator.geolocation) {
+                navigator.geolocation.getCurrentPosition(function(position) {
+                    currentLat = position.coords.latitude;
+                    currentLon = position.coords.longitude;
+                    
+                    // Update location display
+                    getLocationName(currentLat, currentLon)
+                        .then(locationName => {
+                            document.getElementById('current-location').textContent = locationName;
+                        });
+                    
+                    // Load weather data
+                    loadWeatherData(currentLat, currentLon);
+                }, function(error) {
+                    console.error('Error getting location:', error);
+                    document.getElementById('current-location').textContent = 'Location not available';
+                    
+                    // Use a default location (New York City)
+                    currentLat = 40.7128;
+                    currentLon = -74.0060;
+                    document.getElementById('current-location').textContent = 'New York City (default)';
+                    
+                    // Load weather data for default location
+                    loadWeatherData(currentLat, currentLon);
+                });
+            } else {
+                console.error('Geolocation is not supported by this browser');
+                document.getElementById('current-location').textContent = 'Geolocation not supported';
+                
+                // Use a default location (New York City)
+                currentLat = 40.7128;
+                currentLon = -74.0060;
+                document.getElementById('current-location').textContent = 'New York City (default)';
+                
+                // Load weather data for default location
+                loadWeatherData(currentLat, currentLon);
+            }
+            
+            // Add event listeners
+            document.getElementById('use-my-location').addEventListener('click', function() {
+                if (navigator.geolocation) {
+                    navigator.geolocation.getCurrentPosition(function(position) {
+                        currentLat = position.coords.latitude;
+                        currentLon = position.coords.longitude;
+                        
+                        // Update location display
+                        getLocationName(currentLat, currentLon)
+                            .then(locationName => {
+                                document.getElementById('current-location').textContent = locationName;
+                            });
+                        
+                        // Load weather data
+                        loadWeatherData(currentLat, currentLon);
+                    }, function(error) {
+                        console.error('Error getting location:', error);
+                        alert('Unable to get your location. Please check your privacy settings and try again.');
+                    });
+                }
+            });
+            
+            document.getElementById('location-search').addEventListener('click', function() {
+                const locationInput = document.getElementById('location-input').value;
+                if (!locationInput) return;
+                
+                // Geocode the location
+                geocodeLocation(locationInput)
+                    .then(result => {
+                        if (result) {
+                            currentLat = result.latitude;
+                            currentLon = result.longitude;
+                            
+                            // Update location display
+                            document.getElementById('current-location').textContent = result.locationName;
+                            
+                            // Load weather data
+                            loadWeatherData(currentLat, currentLon);
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Error geocoding location:', error);
+                        alert('Unable to find the location. Please try a different search term.');
+                    });
+            });
+            
+            // Handle enter key in search input
+            document.getElementById('location-input').addEventListener('keyup', function(event) {
+                if (event.key === 'Enter') {
+                    document.getElementById('location-search').click();
+                }
+            });
+            
+            // Toggle astronomy view
+            document.getElementById('astro-view-switch').addEventListener('change', function() {
+                updateForecastTable(forecastData, this.checked);
+            });
+        });
+        
+        // Function to load weather data
+        function loadWeatherData(lat, lon) {
+            // In a real app, this would call your API
+            console.log(`Loading weather data for ${lat}, ${lon}`);
+            
+            // Simulate API call - this would be replaced with a real API call
+            Promise.all([
+                fetch(`/api/weather/current?lat=${lat}&lon=${lon}`).then(res => res.json()),
+                fetch(`/api/weather/forecast?lat=${lat}&lon=${lon}`).then(res => res.json())
+            ])
+            .then(([current, forecast]) => {
+                weatherData = current;
+                forecastData = forecast;
+                
+                // Update UI with current weather
+                updateCurrentWeather(weatherData);
+                
+                // Update UI with moon phase
+                updateMoonPhase(weatherData.moonPhase);
+                
+                // Update forecast table
+                updateForecastTable(forecastData, document.getElementById('astro-view-switch').checked);
+                
+                // Generate observation tips
+                generateObservationTips(weatherData, forecastData);
+            })
+            .catch(error => {
+                console.error('Error loading weather data:', error);
+                
+                // For development/demo purposes, use sample data
+                // This would be removed in a production application
+                useSampleData();
+            });
+        }
+        
+        // Function to update current weather display
+        function updateCurrentWeather(data) {
+            // Basic weather info
+            document.getElementById('current-temp').textContent = `${data.temperature.toFixed(1)}°C`;
+            document.getElementById('weather-description').textContent = data.weatherDescription;
+            document.getElementById('humidity').textContent = data.humidity;
+            document.getElementById('wind-speed').textContent = (data.windSpeed * 3.6).toFixed(1); // Convert m/s to km/h
+            document.getElementById('pressure').textContent = data.pressure;
+            document.getElementById('cloud-cover').textContent = data.cloudCover;
+            document.getElementById('visibility').textContent = data.visibility.toFixed(1);
+            document.getElementById('dew-point').textContent = data.dewPoint.toFixed(1);
+            document.getElementById('precipitation').textContent = data.precipitation ? data.precipitation.toFixed(0) : '0';
+            
+            // Weather icon
+            document.getElementById('weather-icon').src = `/images/weather/${data.iconCode}.svg`;
+            
+            // Viewing score
+            const score = data.astronomyViewingScore;
+            document.getElementById('viewing-score').textContent = `${score}/5`;
+            
+            let recommendation = '';
+            let scoreClass = '';
+            
+            if (score >= 4) {
+                recommendation = 'Excellent conditions for astronomy! Clear skies and good visibility.';
+                scoreClass = 'text-success';
+            } else if (score >= 3) {
+                recommendation = 'Good conditions for astronomy. Some minor issues may affect viewing.';
+                scoreClass = 'text-primary';
+            } else if (score >= 2) {
+                recommendation = 'Fair conditions. Consider short viewing sessions or bright objects.';
+                scoreClass = 'text-warning';
+            } else {
+                recommendation = 'Poor conditions for astronomy. Not recommended for serious viewing.';
+                scoreClass = 'text-danger';
+            }
+            
+            document.getElementById('viewing-score').className = `display-4 mb-2 ${scoreClass}`;
+            document.getElementById('viewing-recommendation').textContent = recommendation;
+            
+            // Sunrise and sunset
+            const sunriseTime = new Date(data.sunriseTime);
+            const sunsetTime = new Date(data.sunsetTime);
+            
+            document.getElementById('sunrise-time').textContent = sunriseTime.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+            document.getElementById('sunset-time').textContent = sunsetTime.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+            
+            // Calculate astronomical twilight (approx. 1.5 hours after sunset)
+            const astroTwilightTime = new Date(sunsetTime.getTime() + (90 * 60 * 1000));
+            document.getElementById('astro-twilight').textContent = astroTwilightTime.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+        }
+        
+        // Function to update moon phase display
+        function updateMoonPhase(moonPhase) {
+            document.getElementById('moon-phase-name').textContent = moonPhase.phaseDescription;
+            document.getElementById('moon-illumination').textContent = (moonPhase.illumination * 100).toFixed(0);
+            document.getElementById('moon-age').textContent = moonPhase.ageInDays;
+            document.getElementById('moon-phase-image').src = moonPhase.iconPath;
+            
+            const rating = moonPhase.astroRating;
+            let ratingClass = 'bg-danger';
+            
+            if (rating >= 4) ratingClass = 'bg-success';
+            else if (rating >= 3) ratingClass = 'bg-primary';
+            else if (rating >= 2) ratingClass = 'bg-warning';
+            
+            document.getElementById('moon-astro-rating').className = `badge ${ratingClass}`;
+            document.getElementById('moon-astro-rating').textContent = `Astronomy Rating: ${rating}/5`;
+        }
+        
+        // Function to update forecast table
+        function updateForecastTable(forecast, astroView) {
+            const tableBody = document.getElementById('forecast-table-body');
+            tableBody.innerHTML = '';
+            
+            forecast.forEach(day => {
+                const date = new Date(day.dateTime);
+                const formattedDate = date.toLocaleDateString([], { weekday: 'short', month: 'short', day: 'numeric' });
+                
+                const row = document.createElement('tr');
+                
+                // Date
+                const dateCell = document.createElement('td');
+                dateCell.textContent = formattedDate;
+                row.appendChild(dateCell);
+                
+                // Conditions
+                const conditionsCell = document.createElement('td');
+                const conditionsContent = document.createElement('div');
+                conditionsContent.className = 'd-flex align-items-center';
+                
+                const icon = document.createElement('img');
+                icon.src = `/images/weather/${day.iconCode}.svg`;
+                icon.alt = day.weatherDescription;
+                icon.style.width = '30px';
+                icon.style.marginRight = '8px';
+                
+                conditionsContent.appendChild(icon);
+                conditionsContent.appendChild(document.createTextNode(day.weatherDescription));
+                conditionsCell.appendChild(conditionsContent);
+                row.appendChild(conditionsCell);
+                
+                // Temperature
+                const tempCell = document.createElement('td');
+                tempCell.textContent = `${day.temperature.toFixed(1)}°C`;
+                row.appendChild(tempCell);
+                
+                // Cloud Cover
+                const cloudCell = document.createElement('td');
+                cloudCell.textContent = `${day.cloudCover}%`;
+                row.appendChild(cloudCell);
+                
+                // Humidity
+                const humidityCell = document.createElement('td');
+                humidityCell.textContent = `${day.humidity}%`;
+                row.appendChild(humidityCell);
+                
+                // Moon Phase
+                const moonCell = document.createElement('td');
+                const moonContent = document.createElement('div');
+                moonContent.className = 'd-flex align-items-center';
+                
+                const moonIcon = document.createElement('img');
+                moonIcon.src = day.moonPhase.iconPath;
+                moonIcon.alt = day.moonPhase.phaseDescription;
+                moonIcon.style.width = '25px';
+                moonIcon.style.marginRight = '8px';
+                
+                moonContent.appendChild(moonIcon);
+                moonContent.appendChild(document.createTextNode(day.moonPhase.phaseDescription));
+                moonCell.appendChild(moonContent);
+                row.appendChild(moonCell);
+                
+                // Viewing Score
+                const scoreCell = document.createElement('td');
+                const score = astroView 
+                    ? Math.min(day.astronomyViewingScore, day.moonPhase.astroRating) // Combined score in astro view
+                    : day.astronomyViewingScore; // Weather-only score
+                
+                let badgeClass = 'bg-danger';
+                if (score >= 4) badgeClass = 'bg-success';
+                else if (score >= 3) badgeClass = 'bg-primary';
+                else if (score >= 2) badgeClass = 'bg-warning';
+                
+                const scoreBadge = document.createElement('span');
+                scoreBadge.className = `badge ${badgeClass}`;
+                scoreBadge.textContent = `${score}/5`;
+                scoreCell.appendChild(scoreBadge);
+                row.appendChild(scoreCell);
+                
+                tableBody.appendChild(row);
+            });
+        }
+        
+        // Function to generate observation tips
+        function generateObservationTips(current, forecast) {
+            const tipsElement = document.getElementById('observation-tips');
+            const tips = [];
+            
+            // Add tips based on weather
+            if (current.cloudCover > 70) {
+                tips.push('Heavy cloud cover tonight. Consider postponing detailed observations.');
+            } else if (current.cloudCover > 30) {
+                tips.push('Partial cloud cover may affect viewing. Focus on brighter objects tonight.');
+            } else {
+                tips.push('Clear skies are perfect for all types of astronomical observations!');
+            }
+            
+            // Add tips based on moon phase
+            if (current.moonPhase.illumination > 0.8) {
+                tips.push('Full or near-full moon will wash out faint objects. Good time for lunar observations.');
+            } else if (current.moonPhase.illumination < 0.2) {
+                tips.push('Dark skies with minimal moonlight. Excellent for deep sky objects and Milky Way photography.');
+            }
+            
+            // Add tips based on humidity
+            if (current.humidity > 80) {
+                tips.push('High humidity may cause dew on equipment. Use dew heaters or shields on your optics.');
+            }
+            
+            // Add tip based on temperature
+            if (current.temperature < 5) {
+                tips.push('Cold temperatures tonight. Dress warmly and consider battery life of electronic equipment.');
+            }
+            
+            // Add tip about optimal viewing timing
+            tips.push(`Best viewing begins around ${document.getElementById('astro-twilight').textContent} after astronomical twilight ends.`);
+            
+            // Add tip about upcoming weather
+            const bestDay = forecast.reduce((best, day, index) => {
+                const score = day.astronomyViewingScore;
+                if (score > best.score) {
+                    return { day: index, score: score };
+                }
+                return best;
+            }, { day: -1, score: 0 });
+            
+            if (bestDay.day > 0 && bestDay.score >= 4) {
+                const date = new Date(forecast[bestDay.day].dateTime);
+                const dayName = date.toLocaleDateString([], { weekday: 'long' });
+                tips.push(`${dayName} looks like the best viewing night in the next 5 days with a rating of ${bestDay.score}/5.`);
+            }
+            
+            // Display the tips
+            const tipsHTML = tips.map(tip => `<p class="mb-2"><i class="bi bi-check-circle-fill text-success me-2"></i>${tip}</p>`).join('');
+            tipsElement.innerHTML = tipsHTML;
+        }
+        
+        // Function to get location name from coordinates
+        async function getLocationName(lat, lon) {
+            try {
+                // In a real app, this would use a geocoding service
+                // For now, we'll return a simulated result
+                return `${lat.toFixed(2)}, ${lon.toFixed(2)}`;
+            } catch (error) {
+                console.error('Error getting location name:', error);
+                return `${lat.toFixed(2)}, ${lon.toFixed(2)}`;
+            }
+        }
+        
+        // Function to geocode a location string to coordinates
+        async function geocodeLocation(locationString) {
+            try {
+                // In a real app, this would use a geocoding service
+                // For now, we'll return a simulated result for certain locations
+                
+                // Sample coordinates for a few cities
+                const locations = {
+                    'new york': { latitude: 40.7128, longitude: -74.0060, locationName: 'New York, NY' },
+                    'los angeles': { latitude: 34.0522, longitude: -118.2437, locationName: 'Los Angeles, CA' },
+                    'chicago': { latitude: 41.8781, longitude: -87.6298, locationName: 'Chicago, IL' },
+                    'london': { latitude: 51.5074, longitude: -0.1278, locationName: 'London, UK' },
+                    'paris': { latitude: 48.8566, longitude: 2.3522, locationName: 'Paris, France' },
+                    'tokyo': { latitude: 35.6762, longitude: 139.6503, locationName: 'Tokyo, Japan' },
+                };
+                
+                const normalizedInput = locationString.toLowerCase().trim();
+                
+                for (const [key, location] of Object.entries(locations)) {
+                    if (normalizedInput.includes(key)) {
+                        return location;
+                    }
+                }
+                
+                // If no match, return a mock location (New York as default)
+                return locations['new york'];
+            } catch (error) {
+                console.error('Error geocoding location:', error);
+                throw error;
+            }
+        }
+        
+        // Function to use sample data for development/demo
+        function useSampleData() {
+            // Create sample current weather data
+            weatherData = {
+                dateTime: new Date(),
+                temperature: 15.3,
+                humidity: 65,
+                windSpeed: 3.2,
+                cloudCover: 25,
+                precipitation: 10,
+                weatherDescription: 'Partly Cloudy',
+                iconCode: '02n',
+                visibility: 8.5,
+                pressure: 1013,
+                dewPoint: 8.7,
+                sunriseTime: new Date(new Date().setHours(6, 30)),
+                sunsetTime: new Date(new Date().setHours(19, 45)),
+                astronomyViewingScore: 4,
+                moonPhase: {
+                    phaseDescription: 'Waxing Crescent',
+                    illumination: 0.25,
+                    ageInDays: 4,
+                    iconPath: '/images/moon/phase_1.svg',
+                    astroRating: 4
+                }
+            };
+            
+            // Create sample forecast data
+            forecastData = [];
+            for (let i = 0; i < 5; i++) {
+                const date = new Date();
+                date.setDate(date.getDate() + i);
+                
+                const forecast = {
+                    dateTime: date,
+                    temperature: 15 + Math.random() * 5 - 2,
+                    humidity: 60 + Math.random() * 20 - 10,
+                    windSpeed: 2 + Math.random() * 3,
+                    cloudCover: Math.floor(Math.random() * 100),
+                    precipitation: Math.floor(Math.random() * 30),
+                    weatherDescription: ['Clear', 'Partly Cloudy', 'Cloudy', 'Light Rain', 'Overcast'][Math.floor(Math.random() * 5)],
+                    iconCode: ['01d', '02d', '03d', '10d', '04d'][Math.floor(Math.random() * 5)],
+                    astronomyViewingScore: Math.floor(Math.random() * 5) + 1,
+                    moonPhase: {
+                        phaseDescription: ['New Moon', 'Waxing Crescent', 'First Quarter', 'Waxing Gibbous', 'Full Moon'][i % 5],
+                        illumination: i * 0.2,
+                        ageInDays: i * 3,
+                        iconPath: `/images/moon/phase_${i}.svg`,
+                        astroRating: 5 - i % 5
+                    }
+                };
+                
+                forecastData.push(forecast);
+            }
+            
+            // Update UI with the sample data
+            updateCurrentWeather(weatherData);
+            updateMoonPhase(weatherData.moonPhase);
+            updateForecastTable(forecastData, document.getElementById('astro-view-switch').checked);
+            generateObservationTips(weatherData, forecastData);
+        }
+    </script>
+}
+
+@section Styles {
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.8.1/font/bootstrap-icons.css">
+}

@@ -1,0 +1,96 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 400">
+  <!-- SVG definitions that can be referenced by ID -->
+  <defs>
+    <!-- New Moon -->
+    <symbol id="new_moon" viewBox="0 0 100 100">
+      <circle cx="50" cy="50" r="45" fill="#222222" stroke="#888888" stroke-width="2" />
+    </symbol>
+    
+    <!-- Waxing Crescent -->
+    <symbol id="waxing_crescent" viewBox="0 0 100 100">
+      <circle cx="50" cy="50" r="45" fill="#222222" stroke="#888888" stroke-width="2" />
+      <path d="M50,5 a45,45 0 0,0 0,90 a20,45 0 0,1 0,-90 z" fill="#DDDDDD" />
+    </symbol>
+    
+    <!-- First Quarter -->
+    <symbol id="first_quarter" viewBox="0 0 100 100">
+      <circle cx="50" cy="50" r="45" fill="#222222" stroke="#888888" stroke-width="2" />
+      <path d="M50,5 a45,45 0 0,0 0,90 a0,45 0 0,1 0,-90 z" fill="#DDDDDD" />
+    </symbol>
+    
+    <!-- Waxing Gibbous -->
+    <symbol id="waxing_gibbous" viewBox="0 0 100 100">
+      <circle cx="50" cy="50" r="45" fill="#222222" stroke="#888888" stroke-width="2" />
+      <path d="M50,5 a45,45 0 0,0 0,90 a-20,45 0 0,1 0,-90 z" fill="#DDDDDD" />
+    </symbol>
+    
+    <!-- Full Moon -->
+    <symbol id="full_moon" viewBox="0 0 100 100">
+      <circle cx="50" cy="50" r="45" fill="#DDDDDD" stroke="#888888" stroke-width="2" />
+      <circle cx="30" cy="30" r="10" fill="#CCCCCC" opacity="0.6" />
+      <circle cx="70" cy="60" r="15" fill="#CCCCCC" opacity="0.4" />
+    </symbol>
+    
+    <!-- Waning Gibbous -->
+    <symbol id="waning_gibbous" viewBox="0 0 100 100">
+      <circle cx="50" cy="50" r="45" fill="#222222" stroke="#888888" stroke-width="2" />
+      <path d="M50,5 a45,45 0 0,1 0,90 a-20,45 0 0,0 0,-90 z" fill="#DDDDDD" />
+    </symbol>
+    
+    <!-- Last Quarter -->
+    <symbol id="last_quarter" viewBox="0 0 100 100">
+      <circle cx="50" cy="50" r="45" fill="#222222" stroke="#888888" stroke-width="2" />
+      <path d="M50,5 a45,45 0 0,1 0,90 a0,45 0 0,0 0,-90 z" fill="#DDDDDD" />
+    </symbol>
+    
+    <!-- Waning Crescent -->
+    <symbol id="waning_crescent" viewBox="0 0 100 100">
+      <circle cx="50" cy="50" r="45" fill="#222222" stroke="#888888" stroke-width="2" />
+      <path d="M50,5 a45,45 0 0,1 0,90 a20,45 0 0,0 0,-90 z" fill="#DDDDDD" />
+    </symbol>
+  </defs>
+  
+  <!-- Full Moon Cycle Illustration - for preview purposes -->
+  <use href="#new_moon" x="0" y="0" width="100" height="100" />
+  <use href="#waxing_crescent" x="100" y="0" width="100" height="100" />
+  <use href="#first_quarter" x="200" y="0" width="100" height="100" />
+  <use href="#waxing_gibbous" x="300" y="0" width="100" height="100" />
+  <use href="#full_moon" x="0" y="100" width="100" height="100" />
+  <use href="#waning_gibbous" x="100" y="100" width="100" height="100" />
+  <use href="#last_quarter" x="200" y="100" width="100" height="100" />
+  <use href="#waning_crescent" x="300" y="100" width="100" height="100" />
+  
+  <!-- Labels - for preview purposes -->
+  <text x="50" y="120" font-family="Arial" font-size="10" fill="white" text-anchor="middle">New Moon</text>
+  <text x="150" y="120" font-family="Arial" font-size="10" fill="white" text-anchor="middle">Waxing Crescent</text>
+  <text x="250" y="120" font-family="Arial" font-size="10" fill="white" text-anchor="middle">First Quarter</text>
+  <text x="350" y="120" font-family="Arial" font-size="10" fill="white" text-anchor="middle">Waxing Gibbous</text>
+  <text x="50" y="220" font-family="Arial" font-size="10" fill="white" text-anchor="middle">Full Moon</text>
+  <text x="150" y="220" font-family="Arial" font-size="10" fill="white" text-anchor="middle">Waning Gibbous</text>
+  <text x="250" y="220" font-family="Arial" font-size="10" fill="white" text-anchor="middle">Last Quarter</text>
+  <text x="350" y="220" font-family="Arial" font-size="10" fill="white" text-anchor="middle">Waning Crescent</text>
+  
+  <!-- Moon Cycle Diagram - for preview purposes -->
+  <g transform="translate(200, 300)">
+    <circle cx="0" cy="0" r="65" fill="none" stroke="#444444" stroke-width="1" />
+    <circle cx="0" cy="0" r="5" fill="#888888" />
+    <text x="0" y="0" font-family="Arial" font-size="10" fill="white" text-anchor="middle" dy="3">Earth</text>
+    
+    <!-- Moon positions around Earth -->
+    <circle cx="0" cy="-65" r="10" fill="#DDDDDD" />
+    <circle cx="65" cy="0" r="10" fill="#DDDDDD" />
+    <circle cx="0" cy="65" r="10" fill="#DDDDDD" />
+    <circle cx="-65" cy="0" r="10" fill="#DDDDDD" />
+    
+    <text x="0" y="-80" font-family="Arial" font-size="10" fill="white" text-anchor="middle">New</text>
+    <text x="80" y="0" font-family="Arial" font-size="10" fill="white" text-anchor="middle">First Quarter</text>
+    <text x="0" y="80" font-family="Arial" font-size="10" fill="white" text-anchor="middle">Full</text>
+    <text x="-80" y="0" font-family="Arial" font-size="10" fill="white" text-anchor="middle">Last Quarter</text>
+    
+    <!-- Arrows showing direction -->
+    <path d="M25,25 L35,35" stroke="white" stroke-width="1" fill="none" marker-end="url(#arrowhead)" />
+    <marker id="arrowhead" markerWidth="10" markerHeight="7" refX="0" refY="3.5" orient="auto">
+      <polygon points="0 0, 10 3.5, 0 7" fill="white" />
+    </marker>
+  </g>
+</svg>

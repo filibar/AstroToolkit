@@ -1,0 +1,1104 @@
+@page
+@model ToolsModel
+@{
+    ViewData["Title"] = "Astrophotography Tools";
+}
+
+<div class="container">
+    <h1 class="mb-4">Astrophotography Tools</h1>
+    
+    <div class="row mb-4">
+        <div class="col-lg-6">
+            <div class="card mb-4">
+                <div class="card-header">
+                    <h5 class="mb-0">Exposure Calculator</h5>
+                </div>
+                <div class="card-body">
+                    <div class="mb-3">
+                        <label for="focal-length" class="form-label">Focal Length (mm)</label>
+                        <input type="number" class="form-control" id="focal-length" min="1" value="50">
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label for="aperture" class="form-label">Aperture (f-stop)</label>
+                        <select class="form-select" id="aperture">
+                            <option value="1.4">f/1.4</option>
+                            <option value="1.8">f/1.8</option>
+                            <option value="2">f/2.0</option>
+                            <option value="2.8">f/2.8</option>
+                            <option value="3.5" selected>f/3.5</option>
+                            <option value="4">f/4.0</option>
+                            <option value="5.6">f/5.6</option>
+                            <option value="8">f/8.0</option>
+                            <option value="11">f/11</option>
+                            <option value="16">f/16</option>
+                        </select>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label for="sensor-type" class="form-label">Sensor Type</label>
+                        <select class="form-select" id="sensor-type">
+                            <option value="full-frame" selected>Full Frame</option>
+                            <option value="aps-c">APS-C</option>
+                            <option value="micro-four-thirds">Micro Four Thirds</option>
+                            <option value="one-inch">1-inch</option>
+                        </select>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label for="pixel-pitch" class="form-label">Pixel Pitch (μm)</label>
+                        <input type="number" class="form-control" id="pixel-pitch" min="1" value="4.3" step="0.1">
+                        <div class="form-text">
+                            Typical values: Full Frame (4-8μm), APS-C (3-4.5μm), Micro 4/3 (3-4μm)
+                        </div>
+                    </div>
+                    
+                    <div class="d-grid">
+                        <button class="btn btn-primary" id="calculate-exposure">Calculate</button>
+                    </div>
+                    
+                    <div class="mt-4 px-3 py-2 bg-light rounded" id="exposure-results" style="display: none;">
+                        <h5 class="mt-2">Results</h5>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <p>
+                                    <strong>500 Rule:</strong>
+                                    <span id="rule-500-result">-</span> seconds
+                                </p>
+                            </div>
+                            <div class="col-md-6">
+                                <p>
+                                    <strong>NPF Rule:</strong>
+                                    <span id="rule-npf-result">-</span> seconds
+                                </p>
+                            </div>
+                        </div>
+                        <p class="small text-muted mt-2">
+                            <strong>Note:</strong> NPF Rule is more accurate as it takes sensor resolution into account.
+                            Use these values as starting points and adjust based on your results.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-lg-6">
+            <div class="card mb-4">
+                <div class="card-header">
+                    <h5 class="mb-0">Field of View Calculator</h5>
+                </div>
+                <div class="card-body">
+                    <div class="mb-3">
+                        <label for="fov-focal-length" class="form-label">Focal Length (mm)</label>
+                        <input type="number" class="form-control" id="fov-focal-length" min="1" value="50">
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label for="fov-sensor-type" class="form-label">Sensor Type</label>
+                        <select class="form-select" id="fov-sensor-type">
+                            <option value="full-frame" selected>Full Frame (36 × 24mm)</option>
+                            <option value="aps-c-canon">APS-C Canon (22.2 × 14.8mm)</option>
+                            <option value="aps-c-nikon">APS-C Nikon/Sony (23.6 × 15.6mm)</option>
+                            <option value="micro-four-thirds">Micro Four Thirds (17.3 × 13mm)</option>
+                            <option value="one-inch">1-inch (13.2 × 8.8mm)</option>
+                        </select>
+                    </div>
+                    
+                    <div class="d-grid">
+                        <button class="btn btn-primary" id="calculate-fov">Calculate</button>
+                    </div>
+                    
+                    <div class="mt-4 px-3 py-2 bg-light rounded" id="fov-results" style="display: none;">
+                        <h5 class="mt-2">Field of View</h5>
+                        <div class="row">
+                            <div class="col-6">
+                                <p>
+                                    <strong>Horizontal:</strong>
+                                    <span id="fov-horizontal">-</span>°
+                                </p>
+                            </div>
+                            <div class="col-6">
+                                <p>
+                                    <strong>Vertical:</strong>
+                                    <span id="fov-vertical">-</span>°
+                                </p>
+                            </div>
+                            <div class="col-6">
+                                <p>
+                                    <strong>Diagonal:</strong>
+                                    <span id="fov-diagonal">-</span>°
+                                </p>
+                            </div>
+                            <div class="col-6">
+                                <p>
+                                    <strong>Area:</strong>
+                                    <span id="fov-area">-</span>°²
+                                </p>
+                            </div>
+                        </div>
+                        <div id="fov-visualization" class="text-center my-3" style="height: 100px;">
+                            <!-- Visualization will be rendered here -->
+                        </div>
+                        <p class="small text-muted mt-2">
+                            <strong>Tip:</strong> Wider FOV is better for capturing larger night sky objects like 
+                            the Milky Way, while narrower FOV is better for distant objects like galaxies.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="row mb-4">
+        <div class="col-lg-6">
+            <div class="card mb-4">
+                <div class="card-header">
+                    <h5 class="mb-0">Polar Alignment Assistant</h5>
+                </div>
+                <div class="card-body">
+                    <div class="alert alert-info">
+                        <i class="bi bi-info-circle-fill me-2"></i>
+                        Align your equatorial mount's polar axis with the celestial pole for accurate tracking.
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label for="polar-location" class="form-label">Your Location</label>
+                        <div class="input-group">
+                            <input type="text" class="form-control" id="polar-location" placeholder="Enter a location">
+                            <button class="btn btn-outline-secondary" type="button" id="location-detect">
+                                <i class="bi bi-geo-alt"></i>
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <div class="row mb-3">
+                        <div class="col-6">
+                            <label for="polar-latitude" class="form-label">Latitude</label>
+                            <input type="text" class="form-control" id="polar-latitude" readonly>
+                        </div>
+                        <div class="col-6">
+                            <label for="polar-longitude" class="form-label">Longitude</label>
+                            <input type="text" class="form-control" id="polar-longitude" readonly>
+                        </div>
+                    </div>
+                    
+                    <div class="mb-3 text-center">
+                        <label class="form-label">Hemisphere</label>
+                        <div class="d-flex justify-content-center">
+                            <div class="form-check form-check-inline">
+                                <input class="form-check-input" type="radio" name="hemisphere" id="northern" value="northern" checked>
+                                <label class="form-check-label" for="northern">Northern</label>
+                            </div>
+                            <div class="form-check form-check-inline">
+                                <input class="form-check-input" type="radio" name="hemisphere" id="southern" value="southern">
+                                <label class="form-check-label" for="southern">Southern</label>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="d-grid">
+                        <button class="btn btn-primary" id="generate-polar-guide">Generate Guide</button>
+                    </div>
+                    
+                    <div class="mt-4" id="polar-alignment-guide" style="display: none;">
+                        <h5>Polar Alignment Instructions</h5>
+                        
+                        <div class="text-center mb-3">
+                            <img src="/images/polar-alignment-reference.svg" alt="Polar Alignment Reference" class="img-fluid" style="max-width: 200px;">
+                        </div>
+                        
+                        <div id="polar-alignment-steps">
+                            <!-- Steps will be populated here -->
+                        </div>
+                        
+                        <div class="text-center mt-3">
+                            <button class="btn btn-sm btn-outline-primary" id="print-polar-guide">
+                                <i class="bi bi-printer"></i> Print Instructions
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-lg-6">
+            <div class="card mb-4">
+                <div class="card-header">
+                    <h5 class="mb-0">Depth of Field Calculator</h5>
+                </div>
+                <div class="card-body">
+                    <div class="mb-3">
+                        <label for="dof-focal-length" class="form-label">Focal Length (mm)</label>
+                        <input type="number" class="form-control" id="dof-focal-length" min="1" value="50">
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label for="dof-aperture" class="form-label">Aperture (f-stop)</label>
+                        <select class="form-select" id="dof-aperture">
+                            <option value="1.4">f/1.4</option>
+                            <option value="1.8">f/1.8</option>
+                            <option value="2">f/2.0</option>
+                            <option value="2.8">f/2.8</option>
+                            <option value="3.5" selected>f/3.5</option>
+                            <option value="4">f/4.0</option>
+                            <option value="5.6">f/5.6</option>
+                            <option value="8">f/8.0</option>
+                            <option value="11">f/11</option>
+                            <option value="16">f/16</option>
+                        </select>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label for="dof-distance" class="form-label">Subject Distance (m)</label>
+                        <input type="number" class="form-control" id="dof-distance" min="0.1" value="10" step="0.1">
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label for="dof-sensor-type" class="form-label">Sensor Type</label>
+                        <select class="form-select" id="dof-sensor-type">
+                            <option value="full-frame" selected>Full Frame</option>
+                            <option value="aps-c">APS-C</option>
+                            <option value="micro-four-thirds">Micro Four Thirds</option>
+                            <option value="one-inch">1-inch</option>
+                        </select>
+                    </div>
+                    
+                    <div class="d-grid">
+                        <button class="btn btn-primary" id="calculate-dof">Calculate</button>
+                    </div>
+                    
+                    <div class="mt-4 px-3 py-2 bg-light rounded" id="dof-results" style="display: none;">
+                        <h5 class="mt-2">Depth of Field Results</h5>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <p>
+                                    <strong>Near Limit:</strong>
+                                    <span id="dof-near">-</span> m
+                                </p>
+                            </div>
+                            <div class="col-md-6">
+                                <p>
+                                    <strong>Far Limit:</strong>
+                                    <span id="dof-far">-</span> m
+                                </p>
+                            </div>
+                        </div>
+                        <p>
+                            <strong>Total Depth of Field:</strong>
+                            <span id="dof-total">-</span> m
+                        </p>
+                        <p>
+                            <strong>Hyperfocal Distance:</strong>
+                            <span id="dof-hyperfocal">-</span> m
+                        </p>
+                        <div id="dof-visualization" class="my-3">
+                            <!-- DOF visualization will be rendered here -->
+                        </div>
+                        <p class="small text-muted mt-2">
+                            <strong>Tip for Astrophotography:</strong> Focus at the hyperfocal distance to maximize 
+                            depth of field from half the hyperfocal distance to infinity.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="row">
+        <div class="col-lg-6">
+            <div class="card mb-4">
+                <div class="card-header">
+                    <h5 class="mb-0">Star Target Finder</h5>
+                </div>
+                <div class="card-body">
+                    <div class="alert alert-info">
+                        <i class="bi bi-info-circle-fill me-2"></i>
+                        Find interesting celestial objects that are visible tonight based on your location.
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label for="target-date" class="form-label">Date</label>
+                        <input type="date" class="form-control" id="target-date">
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label for="target-location" class="form-label">Your Location</label>
+                        <div class="input-group">
+                            <input type="text" class="form-control" id="target-location" placeholder="Enter a location">
+                            <button class="btn btn-outline-secondary" type="button" id="target-detect-location">
+                                <i class="bi bi-geo-alt"></i>
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label for="target-type" class="form-label">Object Type</label>
+                        <select class="form-select" id="target-type">
+                            <option value="all" selected>All Objects</option>
+                            <option value="galaxy">Galaxies</option>
+                            <option value="nebula">Nebulae</option>
+                            <option value="cluster">Star Clusters</option>
+                            <option value="planet">Planets</option>
+                        </select>
+                    </div>
+                    
+                    <div class="d-grid">
+                        <button class="btn btn-primary" id="find-targets">Find Targets</button>
+                    </div>
+                    
+                    <div class="mt-4" id="target-results" style="display: none;">
+                        <h5>Recommended Targets Tonight</h5>
+                        <div class="table-responsive">
+                            <table class="table table-hover">
+                                <thead>
+                                    <tr>
+                                        <th>Object</th>
+                                        <th>Type</th>
+                                        <th>Visibility</th>
+                                        <th>Recommended Gear</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="target-results-body">
+                                    <!-- Results will be populated here -->
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-lg-6">
+            <div class="card mb-4">
+                <div class="card-header">
+                    <h5 class="mb-0">ISO & Exposure Calculator</h5>
+                </div>
+                <div class="card-body">
+                    <div class="mb-3">
+                        <label for="iso-target" class="form-label">Target Type</label>
+                        <select class="form-select" id="iso-target">
+                            <option value="milky-way" selected>Milky Way</option>
+                            <option value="stars">Stars/Constellations</option>
+                            <option value="moon">Moon</option>
+                            <option value="planets">Planets</option>
+                            <option value="deep-sky">Deep Sky Objects</option>
+                        </select>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label for="iso-light-pollution" class="form-label">Light Pollution Level</label>
+                        <select class="form-select" id="iso-light-pollution">
+                            <option value="1">Bortle 1 (Excellent Dark Sky)</option>
+                            <option value="2">Bortle 2</option>
+                            <option value="3">Bortle 3</option>
+                            <option value="4" selected>Bortle 4 (Rural/Suburban Transition)</option>
+                            <option value="5">Bortle 5</option>
+                            <option value="6">Bortle 6</option>
+                            <option value="7">Bortle 7 (Suburban/Urban Transition)</option>
+                            <option value="8">Bortle 8</option>
+                            <option value="9">Bortle 9 (Inner City)</option>
+                        </select>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label for="iso-camera-quality" class="form-label">Camera Sensor Quality</label>
+                        <select class="form-select" id="iso-camera-quality">
+                            <option value="entry">Entry Level</option>
+                            <option value="mid-range" selected>Mid-Range</option>
+                            <option value="high-end">High-End</option>
+                            <option value="astro-mod">Astro-Modified</option>
+                        </select>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label for="iso-aperture" class="form-label">Lens Aperture</label>
+                        <select class="form-select" id="iso-aperture">
+                            <option value="1.4">f/1.4</option>
+                            <option value="1.8">f/1.8</option>
+                            <option value="2">f/2.0</option>
+                            <option value="2.8" selected>f/2.8</option>
+                            <option value="3.5">f/3.5</option>
+                            <option value="4">f/4.0</option>
+                            <option value="5.6">f/5.6</option>
+                        </select>
+                    </div>
+                    
+                    <div class="d-grid">
+                        <button class="btn btn-primary" id="calculate-iso">Calculate</button>
+                    </div>
+                    
+                    <div class="mt-4 px-3 py-2 bg-light rounded" id="iso-results" style="display: none;">
+                        <h5 class="mt-2">Recommended Settings</h5>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <p>
+                                    <strong>ISO:</strong>
+                                    <span id="recommended-iso">-</span>
+                                </p>
+                            </div>
+                            <div class="col-md-6">
+                                <p>
+                                    <strong>Shutter Speed:</strong>
+                                    <span id="recommended-shutter">-</span>
+                                </p>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <p>
+                                    <strong>Aperture:</strong>
+                                    <span id="recommended-aperture">-</span>
+                                </p>
+                            </div>
+                            <div class="col-md-6">
+                                <p>
+                                    <strong>Focus:</strong>
+                                    <span id="recommended-focus">-</span>
+                                </p>
+                            </div>
+                        </div>
+                        <p>
+                            <strong>Additional Tips:</strong>
+                            <span id="iso-tips">-</span>
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        // Initialize date input to current date
+        document.addEventListener('DOMContentLoaded', function() {
+            const today = new Date();
+            const formattedDate = today.toISOString().split('T')[0];
+            document.getElementById('target-date').value = formattedDate;
+            
+            // Initialize all calculators
+            initExposureCalculator();
+            initFovCalculator();
+            initPolarAlignmentTool();
+            initDofCalculator();
+            initStarTargetFinder();
+            initIsoCalculator();
+        });
+        
+        // Exposure Calculator
+        function initExposureCalculator() {
+            document.getElementById('calculate-exposure').addEventListener('click', function() {
+                const focalLength = parseFloat(document.getElementById('focal-length').value);
+                const aperture = parseFloat(document.getElementById('aperture').value);
+                const pixelPitch = parseFloat(document.getElementById('pixel-pitch').value);
+                const sensorType = document.getElementById('sensor-type').value;
+                
+                // Calculate using 500 Rule
+                const rule500 = 500 / focalLength;
+                
+                // Calculate using NPF Rule
+                // NPF Rule: (35 × aperture + 30 × pixel pitch) ÷ focal length
+                // Apply crop factor for non-full-frame sensors
+                let cropFactor = 1;
+                switch(sensorType) {
+                    case 'aps-c':
+                        cropFactor = 1.5;
+                        break;
+                    case 'micro-four-thirds':
+                        cropFactor = 2;
+                        break;
+                    case 'one-inch':
+                        cropFactor = 2.7;
+                        break;
+                }
+                
+                // Adjusted focal length for crop sensors
+                const adjustedFocalLength = focalLength * cropFactor;
+                
+                // NPF calculation
+                const npfRule = (35 * aperture + 30 * pixelPitch) / adjustedFocalLength;
+                
+                // Update results
+                document.getElementById('rule-500-result').textContent = rule500.toFixed(1);
+                document.getElementById('rule-npf-result').textContent = npfRule.toFixed(1);
+                
+                // Show results
+                document.getElementById('exposure-results').style.display = 'block';
+            });
+        }
+        
+        // Field of View Calculator
+        function initFovCalculator() {
+            document.getElementById('calculate-fov').addEventListener('click', function() {
+                const focalLength = parseFloat(document.getElementById('fov-focal-length').value);
+                const sensorType = document.getElementById('fov-sensor-type').value;
+                
+                // Sensor dimensions in mm
+                let sensorWidth, sensorHeight;
+                switch(sensorType) {
+                    case 'full-frame':
+                        sensorWidth = 36;
+                        sensorHeight = 24;
+                        break;
+                    case 'aps-c-canon':
+                        sensorWidth = 22.2;
+                        sensorHeight = 14.8;
+                        break;
+                    case 'aps-c-nikon':
+                        sensorWidth = 23.6;
+                        sensorHeight = 15.6;
+                        break;
+                    case 'micro-four-thirds':
+                        sensorWidth = 17.3;
+                        sensorHeight = 13;
+                        break;
+                    case 'one-inch':
+                        sensorWidth = 13.2;
+                        sensorHeight = 8.8;
+                        break;
+                }
+                
+                // Calculate FOV in degrees
+                // FOV = 2 * arctan(sensor size / (2 * focal length))
+                const horizontalFov = 2 * Math.atan(sensorWidth / (2 * focalLength)) * (180 / Math.PI);
+                const verticalFov = 2 * Math.atan(sensorHeight / (2 * focalLength)) * (180 / Math.PI);
+                
+                // Diagonal calculation
+                const diagonalSize = Math.sqrt(sensorWidth * sensorWidth + sensorHeight * sensorHeight);
+                const diagonalFov = 2 * Math.atan(diagonalSize / (2 * focalLength)) * (180 / Math.PI);
+                
+                // Area calculation
+                const area = horizontalFov * verticalFov;
+                
+                // Update results
+                document.getElementById('fov-horizontal').textContent = horizontalFov.toFixed(1);
+                document.getElementById('fov-vertical').textContent = verticalFov.toFixed(1);
+                document.getElementById('fov-diagonal').textContent = diagonalFov.toFixed(1);
+                document.getElementById('fov-area').textContent = area.toFixed(1);
+                
+                // Create a simple visualization
+                const visualizationDiv = document.getElementById('fov-visualization');
+                const aspectRatio = sensorWidth / sensorHeight;
+                const visualWidth = Math.min(200, 200 * aspectRatio);
+                const visualHeight = visualWidth / aspectRatio;
+                
+                visualizationDiv.innerHTML = `
+                    <div class="position-relative">
+                        <div class="position-absolute top-50 start-50 translate-middle">
+                            <div style="width: ${visualWidth}px; height: ${visualHeight}px; border: 2px solid #007bff; background-color: rgba(0, 123, 255, 0.1);">
+                                <div class="d-flex h-100 justify-content-center align-items-center">
+                                    <div class="text-primary small">
+                                        ${horizontalFov.toFixed(1)}° × ${verticalFov.toFixed(1)}°
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                `;
+                
+                // Show results
+                document.getElementById('fov-results').style.display = 'block';
+            });
+        }
+        
+        // Polar Alignment Tool
+        function initPolarAlignmentTool() {
+            // Detect location
+            document.getElementById('location-detect').addEventListener('click', function() {
+                if (navigator.geolocation) {
+                    navigator.geolocation.getCurrentPosition(function(position) {
+                        document.getElementById('polar-latitude').value = position.coords.latitude.toFixed(4);
+                        document.getElementById('polar-longitude').value = position.coords.longitude.toFixed(4);
+                        
+                        // Set hemisphere based on latitude
+                        if (position.coords.latitude >= 0) {
+                            document.getElementById('northern').checked = true;
+                        } else {
+                            document.getElementById('southern').checked = true;
+                        }
+                    }, function(error) {
+                        console.error('Error getting location:', error);
+                        alert('Unable to get your location. Please enter it manually.');
+                    });
+                } else {
+                    alert('Geolocation is not supported by this browser.');
+                }
+            });
+            
+            // Generate guide
+            document.getElementById('generate-polar-guide').addEventListener('click', function() {
+                const latitude = parseFloat(document.getElementById('polar-latitude').value);
+                const longitude = parseFloat(document.getElementById('polar-longitude').value);
+                const hemisphere = document.querySelector('input[name="hemisphere"]:checked').value;
+                
+                if (isNaN(latitude) || isNaN(longitude)) {
+                    alert('Please enter valid latitude and longitude values.');
+                    return;
+                }
+                
+                // Generate the polar alignment guide steps
+                const stepsDiv = document.getElementById('polar-alignment-steps');
+                
+                if (hemisphere === 'northern') {
+                    // Northern hemisphere guide (Polaris)
+                    stepsDiv.innerHTML = `
+                        <ol class="mb-0">
+                            <li class="mb-2">Set up your equatorial mount with the polar axis pointing roughly north.</li>
+                            <li class="mb-2">Adjust the mount's latitude scale to <strong>${Math.abs(latitude).toFixed(1)}°</strong>.</li>
+                            <li class="mb-2">Locate Polaris (the North Star) in the night sky.</li>
+                            <li class="mb-2">Look through your polar scope and adjust the mount until Polaris is in the correct position on the reticle (not exactly at the center).</li>
+                            <li class="mb-2">For precise alignment, use a polar alignment app to determine the exact position of Polaris relative to the true north celestial pole (currently about 0.7° away).</li>
+                            <li>Fine-tune the altitude and azimuth adjustments on your mount until Polaris is in the correct position.</li>
+                        </ol>
+                    `;
+                } else {
+                    // Southern hemisphere guide (Sigma Octantis)
+                    stepsDiv.innerHTML = `
+                        <ol class="mb-0">
+                            <li class="mb-2">Set up your equatorial mount with the polar axis pointing roughly south.</li>
+                            <li class="mb-2">Adjust the mount's latitude scale to <strong>${Math.abs(latitude).toFixed(1)}°</strong>.</li>
+                            <li class="mb-2">The Southern Celestial Pole (SCP) is not marked by a bright star. Instead, use the constellation Octans to locate the approximate position.</li>
+                            <li class="mb-2">Sigma Octantis is the closest naked-eye star to the SCP, but it's quite faint (magnitude 5.5).</li>
+                            <li class="mb-2">Use the Southern Cross (Crux) and the pointers (Alpha and Beta Centauri) to help locate the SCP.</li>
+                            <li>For precise alignment, use a polar alignment app or the drift alignment method.</li>
+                        </ol>
+                    `;
+                }
+                
+                // Show the guide
+                document.getElementById('polar-alignment-guide').style.display = 'block';
+                
+                // Print button functionality
+                document.getElementById('print-polar-guide').addEventListener('click', function() {
+                    window.print();
+                });
+            });
+        }
+        
+        // Depth of Field Calculator
+        function initDofCalculator() {
+            document.getElementById('calculate-dof').addEventListener('click', function() {
+                const focalLength = parseFloat(document.getElementById('dof-focal-length').value);
+                const aperture = parseFloat(document.getElementById('dof-aperture').value);
+                const distance = parseFloat(document.getElementById('dof-distance').value);
+                const sensorType = document.getElementById('dof-sensor-type').value;
+                
+                // Circle of confusion varies by sensor size
+                let circleOfConfusion; // in mm
+                switch(sensorType) {
+                    case 'full-frame':
+                        circleOfConfusion = 0.03;
+                        break;
+                    case 'aps-c':
+                        circleOfConfusion = 0.02;
+                        break;
+                    case 'micro-four-thirds':
+                        circleOfConfusion = 0.015;
+                        break;
+                    case 'one-inch':
+                        circleOfConfusion = 0.011;
+                        break;
+                }
+                
+                // Calculate hyperfocal distance
+                // H = (f² / (N * c)) + f
+                const hyperfocal = (focalLength * focalLength) / (aperture * circleOfConfusion * 1000) + focalLength / 1000;
+                
+                // Calculate near and far limits of DOF
+                // Near limit = (H * d) / (H + (d - f))
+                // Far limit = (H * d) / (H - (d - f))
+                // where d is distance in meters and f is focal length in meters
+                const focalLengthMeters = focalLength / 1000;
+                
+                let nearLimit, farLimit;
+                
+                if (distance >= hyperfocal) {
+                    // When focused at or beyond the hyperfocal distance
+                    nearLimit = hyperfocal / 2;
+                    farLimit = Infinity;
+                } else {
+                    // Normal calculation
+                    nearLimit = (hyperfocal * distance) / (hyperfocal + (distance - focalLengthMeters));
+                    farLimit = (hyperfocal * distance) / (hyperfocal - (distance - focalLengthMeters));
+                    
+                    // Check for infinity
+                    if (farLimit < 0) {
+                        farLimit = Infinity;
+                    }
+                }
+                
+                // Calculate total DOF
+                let totalDof;
+                if (farLimit === Infinity) {
+                    totalDof = Infinity;
+                } else {
+                    totalDof = farLimit - nearLimit;
+                }
+                
+                // Update results
+                document.getElementById('dof-near').textContent = nearLimit.toFixed(2);
+                document.getElementById('dof-far').textContent = farLimit === Infinity ? "∞" : farLimit.toFixed(2);
+                document.getElementById('dof-total').textContent = totalDof === Infinity ? "∞" : totalDof.toFixed(2);
+                document.getElementById('dof-hyperfocal').textContent = hyperfocal.toFixed(2);
+                
+                // Create a DOF visualization
+                const visualizationDiv = document.getElementById('dof-visualization');
+                
+                // Scale for visualization (logarithmic for better visualization)
+                const maxWidth = 100;
+                let nearWidth, farWidth;
+                
+                if (nearLimit < 0.1) {
+                    nearWidth = 1;
+                } else if (nearLimit < 1) {
+                    nearWidth = 5;
+                } else if (nearLimit < 10) {
+                    nearWidth = 10 + (nearLimit - 1) * 2;
+                } else {
+                    nearWidth = 30 + Math.log10(nearLimit) * 10;
+                }
+                
+                if (farLimit === Infinity) {
+                    farWidth = maxWidth;
+                } else if (farLimit < 1) {
+                    farWidth = 5;
+                } else if (farLimit < 10) {
+                    farWidth = 10 + (farLimit - 1) * 2;
+                } else {
+                    farWidth = 30 + Math.log10(farLimit) * 10;
+                }
+                
+                // Ensure widths are within bounds
+                nearWidth = Math.min(Math.max(1, nearWidth), maxWidth - 10);
+                farWidth = Math.min(Math.max(nearWidth + 10, farWidth), maxWidth);
+                
+                visualizationDiv.innerHTML = `
+                    <div class="position-relative" style="height: 40px;">
+                        <div class="position-absolute top-0 start-0 bottom-0" style="left: ${nearWidth}%; width: ${farWidth - nearWidth}%; background-color: rgba(0, 123, 255, 0.2); border: 1px solid #007bff;"></div>
+                        <div class="position-absolute top-0 bottom-0" style="left: 0; width: 100%; border-bottom: 1px solid #666;"></div>
+                        <div class="position-absolute top-0 bottom-0" style="left: ${nearWidth}%; width: 2px; background-color: #007bff;"></div>
+                        <div class="position-absolute top-0 bottom-0" style="left: ${farWidth}%; width: 2px; background-color: #007bff;"></div>
+                        <div class="position-absolute" style="top: -20px; left: ${nearWidth}%; transform: translateX(-50%); font-size: 0.8rem;">${nearLimit.toFixed(1)}m</div>
+                        <div class="position-absolute" style="top: -20px; left: ${farWidth}%; transform: translateX(-50%); font-size: 0.8rem;">${farLimit === Infinity ? "∞" : farLimit.toFixed(1) + "m"}</div>
+                    </div>
+                `;
+                
+                // Show results
+                document.getElementById('dof-results').style.display = 'block';
+            });
+        }
+        
+        // Star Target Finder
+        function initStarTargetFinder() {
+            document.getElementById('target-detect-location').addEventListener('click', function() {
+                if (navigator.geolocation) {
+                    navigator.geolocation.getCurrentPosition(function(position) {
+                        document.getElementById('target-location').value = `${position.coords.latitude.toFixed(4)}, ${position.coords.longitude.toFixed(4)}`;
+                    }, function(error) {
+                        console.error('Error getting location:', error);
+                        alert('Unable to get your location. Please enter it manually.');
+                    });
+                } else {
+                    alert('Geolocation is not supported by this browser.');
+                }
+            });
+            
+            document.getElementById('find-targets').addEventListener('click', function() {
+                const date = document.getElementById('target-date').value;
+                const location = document.getElementById('target-location').value;
+                const objectType = document.getElementById('target-type').value;
+                
+                if (!date || !location) {
+                    alert('Please enter a date and location.');
+                    return;
+                }
+                
+                // In a real app, this would call an API to get visible objects
+                // For this demo, we'll use sample data
+                
+                const resultsTableBody = document.getElementById('target-results-body');
+                resultsTableBody.innerHTML = '';
+                
+                // Sample data for demonstration
+                const sampleObjects = [
+                    { name: 'Andromeda Galaxy (M31)', type: 'galaxy', visibility: 'Excellent', gear: 'Wide-field telescope or 50-200mm lens' },
+                    { name: 'Orion Nebula (M42)', type: 'nebula', visibility: 'Very Good', gear: '70-300mm lens or small telescope' },
+                    { name: 'Pleiades (M45)', type: 'cluster', visibility: 'Excellent', gear: 'Wide-field, 24-85mm lens' },
+                    { name: 'Saturn', type: 'planet', visibility: 'Good', gear: 'Telescope with 6mm eyepiece or more' },
+                    { name: 'Whirlpool Galaxy (M51)', type: 'galaxy', visibility: 'Fair', gear: '200mm+ telescope or 600mm+ lens' }
+                ];
+                
+                // Filter by object type if specified
+                const filteredObjects = objectType === 'all' 
+                    ? sampleObjects 
+                    : sampleObjects.filter(obj => obj.type === objectType);
+                
+                // Add objects to the table
+                filteredObjects.forEach(obj => {
+                    const row = document.createElement('tr');
+                    
+                    row.innerHTML = `
+                        <td>${obj.name}</td>
+                        <td>${obj.type.charAt(0).toUpperCase() + obj.type.slice(1)}</td>
+                        <td>${obj.visibility}</td>
+                        <td>${obj.gear}</td>
+                    `;
+                    
+                    resultsTableBody.appendChild(row);
+                });
+                
+                // Show no results message if needed
+                if (filteredObjects.length === 0) {
+                    const row = document.createElement('tr');
+                    row.innerHTML = `<td colspan="4" class="text-center">No objects found matching your criteria.</td>`;
+                    resultsTableBody.appendChild(row);
+                }
+                
+                // Show results
+                document.getElementById('target-results').style.display = 'block';
+            });
+        }
+        
+        // ISO Calculator
+        function initIsoCalculator() {
+            document.getElementById('calculate-iso').addEventListener('click', function() {
+                const target = document.getElementById('iso-target').value;
+                const lightPollution = parseInt(document.getElementById('iso-light-pollution').value);
+                const cameraQuality = document.getElementById('iso-camera-quality').value;
+                const aperture = parseFloat(document.getElementById('iso-aperture').value);
+                
+                let recommendedIso, recommendedShutter, recommendedAperture, recommendedFocus, tips;
+                
+                // Base recommendations on target type
+                switch(target) {
+                    case 'milky-way':
+                        recommendedIso = getIsoForMilkyWay(lightPollution, cameraQuality);
+                        recommendedShutter = '15-30 seconds';
+                        recommendedAperture = 'f/' + aperture;
+                        recommendedFocus = 'Manual focus at infinity';
+                        tips = 'Use a wide-angle lens (14-24mm) to capture more of the galactic core. ' +
+                               'Find a dark location away from city lights for best results.';
+                        break;
+                        
+                    case 'stars':
+                        recommendedIso = getIsoForStars(lightPollution, cameraQuality);
+                        recommendedShutter = '10-20 seconds';
+                        recommendedAperture = 'f/' + aperture;
+                        recommendedFocus = 'Manual focus at infinity';
+                        tips = 'Use the 500 rule (500÷focal length) to avoid star trails. ' +
+                               'Consider stacking multiple images to reduce noise.';
+                        break;
+                        
+                    case 'moon':
+                        recommendedIso = '100-400';
+                        recommendedShutter = '1/100 - 1/250 second';
+                        recommendedAperture = 'f/5.6 - f/11';
+                        recommendedFocus = 'Manual focus at infinity';
+                        tips = 'The moon is very bright! Use the Looney 11 rule: f/11, ISO 100, shutter speed = 1/ISO.';
+                        break;
+                        
+                    case 'planets':
+                        recommendedIso = '400-800';
+                        recommendedShutter = '1/15 - 1/60 second';
+                        recommendedAperture = 'f/5.6 - f/8';
+                        recommendedFocus = 'Manual focus at infinity with live view';
+                        tips = 'Use a long focal length (300mm+). Consider a Barlow lens for more magnification. ' +
+                               'Best results come from stacking many frames.';
+                        break;
+                        
+                    case 'deep-sky':
+                        recommendedIso = getIsoForDeepSky(lightPollution, cameraQuality);
+                        recommendedShutter = '30-300 seconds';
+                        recommendedAperture = 'f/' + aperture;
+                        recommendedFocus = 'Manual focus at infinity with bright star';
+                        tips = 'Use a tracking mount for exposures longer than 30 seconds. ' +
+                               'Light pollution filters can help in urban areas. ' +
+                               'Stack multiple exposures for best results.';
+                        break;
+                }
+                
+                // Update results
+                document.getElementById('recommended-iso').textContent = recommendedIso;
+                document.getElementById('recommended-shutter').textContent = recommendedShutter;
+                document.getElementById('recommended-aperture').textContent = recommendedAperture;
+                document.getElementById('recommended-focus').textContent = recommendedFocus;
+                document.getElementById('iso-tips').textContent = tips;
+                
+                // Show results
+                document.getElementById('iso-results').style.display = 'block';
+            });
+        }
+        
+        // Helper functions for ISO calculator
+        function getIsoForMilkyWay(lightPollution, cameraQuality) {
+            // Base ISO ranges by camera quality
+            let baseIso;
+            switch(cameraQuality) {
+                case 'entry':
+                    baseIso = '1600-3200';
+                    break;
+                case 'mid-range':
+                    baseIso = '3200-6400';
+                    break;
+                case 'high-end':
+                    baseIso = '3200-6400';
+                    break;
+                case 'astro-mod':
+                    baseIso = '1600-3200';
+                    break;
+            }
+            
+            // Adjust for light pollution
+            if (lightPollution <= 3) {
+                return baseIso; // Dark sky, use base ISO
+            } else if (lightPollution <= 6) {
+                // Moderate light pollution
+                switch(cameraQuality) {
+                    case 'entry':
+                        return '800-1600';
+                    case 'mid-range':
+                        return '1600-3200';
+                    case 'high-end':
+                        return '1600-3200';
+                    case 'astro-mod':
+                        return '800-1600';
+                }
+            } else {
+                // Heavy light pollution
+                switch(cameraQuality) {
+                    case 'entry':
+                        return '400-800';
+                    case 'mid-range':
+                        return '800-1600';
+                    case 'high-end':
+                        return '800-1600';
+                    case 'astro-mod':
+                        return '800-1600';
+                }
+            }
+            
+            return baseIso;
+        }
+        
+        function getIsoForStars(lightPollution, cameraQuality) {
+            // Similar to Milky Way but with slightly lower values
+            let baseIso;
+            switch(cameraQuality) {
+                case 'entry':
+                    baseIso = '1600';
+                    break;
+                case 'mid-range':
+                    baseIso = '1600-3200';
+                    break;
+                case 'high-end':
+                    baseIso = '1600-3200';
+                    break;
+                case 'astro-mod':
+                    baseIso = '1600';
+                    break;
+            }
+            
+            // Adjust for light pollution
+            if (lightPollution <= 3) {
+                return baseIso;
+            } else if (lightPollution <= 6) {
+                switch(cameraQuality) {
+                    case 'entry':
+                        return '800';
+                    case 'mid-range':
+                        return '800-1600';
+                    case 'high-end':
+                        return '800-1600';
+                    case 'astro-mod':
+                        return '800';
+                }
+            } else {
+                switch(cameraQuality) {
+                    case 'entry':
+                        return '400';
+                    case 'mid-range':
+                        return '400-800';
+                    case 'high-end':
+                        return '400-800';
+                    case 'astro-mod':
+                        return '400-800';
+                }
+            }
+            
+            return baseIso;
+        }
+        
+        function getIsoForDeepSky(lightPollution, cameraQuality) {
+            // Deep sky objects generally need higher ISO or longer exposures
+            let baseIso;
+            switch(cameraQuality) {
+                case 'entry':
+                    baseIso = '1600-3200';
+                    break;
+                case 'mid-range':
+                    baseIso = '1600-6400';
+                    break;
+                case 'high-end':
+                    baseIso = '1600-6400';
+                    break;
+                case 'astro-mod':
+                    baseIso = '800-3200';
+                    break;
+            }
+            
+            // Adjust for light pollution
+            if (lightPollution <= 3) {
+                return baseIso;
+            } else if (lightPollution <= 6) {
+                switch(cameraQuality) {
+                    case 'entry':
+                        return '800-1600';
+                    case 'mid-range':
+                        return '800-3200';
+                    case 'high-end':
+                        return '800-3200';
+                    case 'astro-mod':
+                        return '800-1600';
+                }
+            } else {
+                // In heavy light pollution, consider narrowband filters
+                return 'Consider narrowband filters with ' + 
+                       (cameraQuality === 'entry' ? '800-1600' : '800-3200');
+            }
+            
+            return baseIso;
+        }
+    </script>
+}
+
+@section Styles {
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.8.1/font/bootstrap-icons.css">
+    <style>
+        /* Custom styling for tools page */
+        .card {
+            height: 100%;
+        }
+        
+        @@media print {
+            /* Print styles for polar alignment guide */
+            body * {
+                visibility: hidden;
+            }
+            
+            #polar-alignment-guide, #polar-alignment-guide * {
+                visibility: visible;
+            }
+            
+            #polar-alignment-guide {
+                position: absolute;
+                left: 0;
+                top: 0;
+                width: 100%;
+            }
+            
+            .no-print {
+                display: none !important;
+            }
+        }
+    </style>
+}

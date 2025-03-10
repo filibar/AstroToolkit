@@ -1,0 +1,44 @@
+is_global = true
+build_property.TargetFramework = net6.0
+build_property.TargetPlatformMinVersion = 
+build_property.UsingMicrosoftNETSdkWeb = true
+build_property.ProjectTypeGuids = 
+build_property.InvariantGlobalization = 
+build_property.PlatformNeutralAssembly = 
+build_property._SupportedPlatformList = Linux,macOS,Windows
+build_property.RootNamespace = AstroToolkitWeb
+build_property.RootNamespace = AstroToolkitWeb
+build_property.ProjectDir = /home/runner/workspace/AstroToolkitWeb/
+build_property.RazorLangVersion = 6.0
+build_property.SupportLocalizedComponentNames = 
+build_property.GenerateRazorMetadataSourceChecksumAttributes = 
+build_property.MSBuildProjectDirectory = /home/runner/workspace/AstroToolkitWeb
+build_property._RazorSourceGeneratorDebug = 
+
+[/home/runner/workspace/AstroToolkitWeb/Pages/Error.cshtml]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXMvRXJyb3IuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[/home/runner/workspace/AstroToolkitWeb/Pages/Index.cshtml]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXMvSW5kZXguY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[/home/runner/workspace/AstroToolkitWeb/Pages/Map.cshtml]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXMvTWFwLmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[/home/runner/workspace/AstroToolkitWeb/Pages/Shared/_Layout.cshtml]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXMvU2hhcmVkL19MYXlvdXQuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[/home/runner/workspace/AstroToolkitWeb/Pages/Tools.cshtml]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXMvVG9vbHMuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[/home/runner/workspace/AstroToolkitWeb/Pages/Weather.cshtml]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXMvV2VhdGhlci5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[/home/runner/workspace/AstroToolkitWeb/Pages/_ViewImports.cshtml]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXMvX1ZpZXdJbXBvcnRzLmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
