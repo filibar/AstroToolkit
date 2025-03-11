@@ -9,7 +9,7 @@ document.addEventListener('DOMContentLoaded', function() {
             new bootstrap.Tooltip(tooltip);
         });
     }
-    
+
     // Initialize popovers
     var popovers = document.querySelectorAll('[data-bs-toggle="popover"]');
     if (popovers.length > 0) {
@@ -17,7 +17,7 @@ document.addEventListener('DOMContentLoaded', function() {
             new bootstrap.Popover(popover);
         });
     }
-    
+
     // Handle dark mode toggle if it exists
     var darkModeToggle = document.getElementById('dark-mode-toggle');
     if (darkModeToggle) {
@@ -27,7 +27,7 @@ document.addEventListener('DOMContentLoaded', function() {
             document.body.classList.add('dark-mode');
             darkModeToggle.checked = true;
         }
-        
+
         // Toggle dark mode when the switch is clicked
         darkModeToggle.addEventListener('change', function() {
             if (this.checked) {
@@ -70,20 +70,20 @@ function showToast(message, type = 'info') {
         toastContainer.className = 'toast-container';
         document.body.appendChild(toastContainer);
     }
-    
+
     // Create toast element
     const toast = document.createElement('div');
     toast.className = 'toast';
     toast.setAttribute('role', 'alert');
     toast.setAttribute('aria-live', 'assertive');
     toast.setAttribute('aria-atomic', 'true');
-    
+
     // Set background color based on type
     let bgClass = 'bg-info';
     if (type === 'success') bgClass = 'bg-success';
     if (type === 'warning') bgClass = 'bg-warning';
     if (type === 'error') bgClass = 'bg-danger';
-    
+
     // Create toast content
     toast.innerHTML = `
         <div class="toast-header ${bgClass} text-white">
@@ -95,17 +95,17 @@ function showToast(message, type = 'info') {
             ${message}
         </div>
     `;
-    
+
     // Add to container
     toastContainer.appendChild(toast);
-    
+
     // Initialize and show toast
     const bsToast = new bootstrap.Toast(toast, {
         autohide: true,
         delay: 5000
     });
     bsToast.show();
-    
+
     // Remove from DOM after hiding
     toast.addEventListener('hidden.bs.toast', function() {
         toast.remove();
@@ -116,7 +116,7 @@ function showToast(message, type = 'info') {
 function handleApiError(error, fallbackMessage = 'An error occurred while fetching data.') {
     console.error('API Error:', error);
     showToast(fallbackMessage, 'error');
-    
+
     // Return a standardized error object that can be used by the calling code
     return {
         error: true,
@@ -179,33 +179,33 @@ function getGeolocationErrorMessage(errorCode) {
 function validateFormInput(input, validationRules = {}) {
     let isValid = true;
     let errorMessage = '';
-    
+
     const value = input.value.trim();
-    
+
     // Check if required
     if (validationRules.required && value === '') {
         isValid = false;
         errorMessage = 'This field is required.';
     }
-    
+
     // Check min length
     if (isValid && validationRules.minLength && value.length < validationRules.minLength) {
         isValid = false;
         errorMessage = `Must be at least ${validationRules.minLength} characters.`;
     }
-    
+
     // Check max length
     if (isValid && validationRules.maxLength && value.length > validationRules.maxLength) {
         isValid = false;
         errorMessage = `Must be no more than ${validationRules.maxLength} characters.`;
     }
-    
+
     // Check pattern
     if (isValid && validationRules.pattern && !validationRules.pattern.test(value)) {
         isValid = false;
         errorMessage = validationRules.patternMessage || 'Invalid format.';
     }
-    
+
     // Check custom validation
     if (isValid && validationRules.custom && typeof validationRules.custom === 'function') {
         const customResult = validationRules.custom(value);
@@ -214,13 +214,13 @@ function validateFormInput(input, validationRules = {}) {
             errorMessage = customResult;
         }
     }
-    
+
     // Update UI based on validation result
     const feedbackElement = input.nextElementSibling;
     if (feedbackElement && feedbackElement.classList.contains('invalid-feedback')) {
         feedbackElement.textContent = errorMessage;
     }
-    
+
     if (isValid) {
         input.classList.remove('is-invalid');
         input.classList.add('is-valid');
@@ -228,7 +228,7 @@ function validateFormInput(input, validationRules = {}) {
         input.classList.remove('is-valid');
         input.classList.add('is-invalid');
     }
-    
+
     return isValid;
 }
 
@@ -236,21 +236,21 @@ function validateFormInput(input, validationRules = {}) {
 function animateCounter(element, targetValue, duration = 1000, prefix = '', suffix = '') {
     const startValue = 0;
     const startTime = performance.now();
-    
+
     function updateCounter(currentTime) {
         const elapsedTime = currentTime - startTime;
-        
+
         if (elapsedTime > duration) {
             element.textContent = prefix + targetValue + suffix;
             return;
         }
-        
+
         const progress = elapsedTime / duration;
         const currentValue = Math.floor(startValue + progress * (targetValue - startValue));
         element.textContent = prefix + currentValue + suffix;
-        
+
         requestAnimationFrame(updateCounter);
     }
-    
+
     requestAnimationFrame(updateCounter);
 }
