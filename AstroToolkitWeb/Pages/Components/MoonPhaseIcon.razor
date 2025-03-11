@@ -1,4 +1,6 @@
 @namespace AstroToolkitWeb.Pages.Components
+@using System.Text.RegularExpressions
+@using AstroToolkitWeb.Models
 
 @if (Phase != null)
 {
@@ -26,7 +28,7 @@
     .moon-phase-icon {
         display: inline-block;
     }
-    
+
     .moon-phase-icon img {
         object-fit: contain;
     }
