@@ -15,10 +15,6 @@ build_property.GenerateRazorMetadataSourceChecksumAttributes =
 build_property.MSBuildProjectDirectory = /home/runner/workspace/AstroToolkitWeb
 build_property._RazorSourceGeneratorDebug = 
 
-[/home/runner/workspace/AstroToolkitWeb/Pages/Components/MoonPhaseIcon.razor]
-build_metadata.AdditionalFiles.TargetPath = UGFnZXMvQ29tcG9uZW50cy9Nb29uUGhhc2VJY29uLnJhem9y
-build_metadata.AdditionalFiles.CssScope = 
-
 [/home/runner/workspace/AstroToolkitWeb/Pages/Components/WeatherIcon.razor]
 build_metadata.AdditionalFiles.TargetPath = UGFnZXMvQ29tcG9uZW50cy9XZWF0aGVySWNvbi5yYXpvcg==
 build_metadata.AdditionalFiles.CssScope = 

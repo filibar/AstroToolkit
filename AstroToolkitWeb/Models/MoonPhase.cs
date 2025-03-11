@@ -54,12 +54,6 @@ namespace AstroToolkitWeb.Models
             else
                 return "waning-crescent";
         }
-        
-        // Get the icon path for the current phase
-        public string GetPhaseIconPath()
-        {
-            return $"images/moon/{GetPhaseIconResource()}.svg";
-        }
 
         //Added properties to match the changed function
         public double IlluminationPercentage { get; set; }
