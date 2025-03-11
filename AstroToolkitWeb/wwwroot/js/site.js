@@ -254,3 +254,22 @@ function animateCounter(element, targetValue, duration = 1000, prefix = '', suff
 
     requestAnimationFrame(updateCounter);
 }
+
+// Map phase type to actual image names
+const phaseImageMap = {
+    0: 'new-moon',
+    1: 'waxing-crescent',
+    2: 'first-quarter',
+    3: 'waxing-gibbous',
+    4: 'full-moon',
+    5: 'waning-gibbous',
+    6: 'last-quarter',
+    7: 'waning-crescent'
+};
+
+// Get the image name or use placeholder if not available
+const availableImages = ['new-moon', 'full-moon', 'waxing-crescent', 'waxing-gibbous', 'placeholder'];
+const imageName = phaseImageMap[data.phase.phaseType] || 'placeholder';
+const imageToUse = availableImages.includes(imageName) ? imageName : 'placeholder';
+
+$('#moon-phase-image').attr('src', `/images/moon/${imageToUse}.svg`);
