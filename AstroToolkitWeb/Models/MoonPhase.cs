@@ -33,6 +33,27 @@ namespace AstroToolkitWeb.Models
 
         // Diameter in arc minutes
         public double? AngularDiameter { get; set; }
+        
+        // Get resource name for the appropriate moon phase icon
+        public string GetPhaseIconResource()
+        {
+            if (Illumination < 5)
+                return "new-moon";
+            else if (Illumination < 45 && PhaseType < 4)
+                return "waxing-crescent";
+            else if (Illumination >= 45 && Illumination < 55 && PhaseType < 4)
+                return "first-quarter";
+            else if (Illumination >= 55 && Illumination < 95 && PhaseType < 4)
+                return "waxing-gibbous";
+            else if (Illumination >= 95)
+                return "full-moon";
+            else if (Illumination >= 55 && Illumination < 95)
+                return "waning-gibbous";
+            else if (Illumination >= 45 && Illumination < 55)
+                return "last-quarter";
+            else
+                return "waning-crescent";
+        }
 
         // Get resource name for the appropriate moon phase icon
         public string GetPhaseIconResource()

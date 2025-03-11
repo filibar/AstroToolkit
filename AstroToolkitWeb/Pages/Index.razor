@@ -7,16 +7,13 @@
 
 <h1>Current Conditions</h1>
 
-@* Assuming weatherData is populated elsewhere *@
 <div>
     <WeatherIcon IconCode="@weatherData.IconCode" />
     <p>Temperature: @weatherData.Temperature</p>
-    <p>Condition: @weatherData.Condition</p>
-</div>
+    <p>Condition: @weatherData.WeatherCondition</p> </div>
 
 
 <h1>Forecast</h1>
-@* Assuming forecast is an array of forecast objects *@
 @foreach (var forecast in forecasts)
 {
     <div>
@@ -30,7 +27,7 @@
 
 @code {
     // Placeholder data - Replace with actual data fetching
-    private WeatherData weatherData = new WeatherData { IconCode = "partly-cloudy", Temperature = 25, Condition = "Partly Cloudy" };
+    private WeatherData weatherData = new WeatherData { IconCode = "partly-cloudy", Temperature = 25, WeatherCondition = "Partly Cloudy" };
     private List<Forecast> forecasts = new List<Forecast>()
     {
         new Forecast { IconCode = "cloudy", Date = DateTime.Now.AddHours(10), Temperature = 22, Description = "Cloudy"},
@@ -59,7 +56,7 @@ public class WeatherData
 {
     public string IconCode { get; set; }
     public int Temperature { get; set; }
-    public string Condition { get; set; }
+    public string WeatherCondition { get; set; } // Added WeatherCondition property
 }
 
 public class Forecast

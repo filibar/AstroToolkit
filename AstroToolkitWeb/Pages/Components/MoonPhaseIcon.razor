@@ -1,10 +1,12 @@
+
 @namespace AstroToolkitWeb.Pages.Components
-@using System.Text.RegularExpressions
 @using AstroToolkitWeb.Models
 
 @if (Phase != null)
 {
-    <img src="@GetIconPath()" alt="@Phase.Name" class="moon-phase-icon" style="@Style" />
+    <div class="moon-phase-icon" title="@Phase.PhaseName">
+        <img src="@GetMoonPhaseIconPath()" alt="@Phase.PhaseName" width="@Size" height="@Size" />
+    </div>
 }
 
 @code {
@@ -12,15 +14,14 @@
     public MoonPhase? Phase { get; set; }
 
     [Parameter]
-    public string Style { get; set; } = "width: 32px; height: 32px;";
+    public int Size { get; set; } = 32;
 
-    private string GetIconPath()
+    private string GetMoonPhaseIconPath()
     {
         if (Phase == null)
-            return "_content/AstroToolkitWeb/images/moon/placeholder.svg";
-
-        string filename = Phase.Name.ToLower().Replace(" ", "-");
-        return $"_content/AstroToolkitWeb/images/moon/{filename}.svg";
+            return "images/moon/placeholder.svg";
+            
+        return $"images/moon/{Phase.GetPhaseIconResource().Replace('_', '-')}.svg";
     }
 }
 
@@ -28,7 +29,7 @@
     .moon-phase-icon {
         display: inline-block;
     }
-
+    
     .moon-phase-icon img {
         object-fit: contain;
     }
