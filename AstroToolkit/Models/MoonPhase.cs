@@ -57,22 +57,30 @@ namespace AstroToolkit.Models
         // Get resource name for the appropriate moon phase icon
         public string GetPhaseIconResource()
         {
+            string iconName;
+            
             if (IlluminationPercentage < 5)
-                return "new_moon";
+                iconName = "new-moon";
             else if (IlluminationPercentage < 45 && DaysSinceNewMoon < 15)
-                return "waxing_crescent";
+                iconName = "waxing-crescent";
             else if (IlluminationPercentage >= 45 && IlluminationPercentage < 55 && DaysSinceNewMoon < 15)
-                return "first_quarter";
+                iconName = "first-quarter";
             else if (IlluminationPercentage >= 55 && IlluminationPercentage < 95 && DaysSinceNewMoon < 15)
-                return "waxing_gibbous";
+                iconName = "waxing-gibbous";
             else if (IlluminationPercentage >= 95)
-                return "full_moon";
+                iconName = "full-moon";
             else if (IlluminationPercentage >= 55 && IlluminationPercentage < 95)
-                return "waning_gibbous";
+                iconName = "waning-gibbous";
             else if (IlluminationPercentage >= 45 && IlluminationPercentage < 55)
-                return "last_quarter";
+                iconName = "last-quarter";
             else
-                return "waning_crescent";
+                iconName = "waning-crescent";
+                
+            // List of available images (based on the assets we know exist)
+            var availableImages = new[] { "new-moon", "full-moon", "waxing-crescent", "waxing-gibbous" };
+            
+            // Return the icon name if it's available, otherwise return placeholder
+            return availableImages.Contains(iconName) ? iconName : "placeholder";
         }
     }
 }
