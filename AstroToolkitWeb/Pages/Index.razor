@@ -2,6 +2,7 @@
 @using AstroToolkitWeb.Pages.Components
 @using AstroToolkitWeb.Models
 @using AstroToolkitWeb.Services
+@using Microsoft.AspNetCore.Components.Web
 
 <PageTitle>Astro Toolkit</PageTitle>
 
@@ -10,7 +11,7 @@
 <div>
     <WeatherIcon IconCode="@weatherData.IconCode" />
     <p>Temperature: @weatherData.Temperature</p>
-    <p>Condition: @weatherData.WeatherCondition</p> </div>
+    <p>Condition: @(weatherData.WeatherCondition ?? "Unknown")</p> </div>
 
 
 <h1>Forecast</h1>
@@ -46,7 +47,7 @@
     private string GetIconPath(string iconCode)
     {
         //Improved logic to handle different icon names
-        string fileName = iconCode.Replace("-", "_"); //Simple replacement, adjust as needed
+        string fileName = iconCode?.Replace("-", "_") ?? "default"; //Handle null IconCode
         return $"/images/moon/{fileName}.svg";
     }
 }
@@ -54,14 +55,14 @@
 // Data Models (Assumptions)
 public class WeatherData
 {
-    public string IconCode { get; set; }
+    public string? IconCode { get; set; } // Made IconCode nullable
     public int Temperature { get; set; }
-    public string WeatherCondition { get; set; } // Added WeatherCondition property
+    public string? WeatherCondition { get; set; } 
 }
 
 public class Forecast
 {
-    public string IconCode { get; set; }
+    public string? IconCode { get; set; } //Made IconCode nullable
     public DateTime Date { get; set; }
     public int Temperature { get; set; }
     public string Description { get; set; }

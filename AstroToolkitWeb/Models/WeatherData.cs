@@ -47,6 +47,15 @@ namespace AstroToolkitWeb.Models
         // Seeing conditions rated 1-10 (1 = poor, 10 = excellent)
         [Range(1, 10)]
         public int? SeeingIndex { get; set; }
+        
+        // Weather condition (clear, cloudy, etc.)
+        public string? WeatherCondition { get; set; }
+        
+        // Icon code for weather API
+        public string? IconCode { get; set; }
+        
+        // Weather description
+        public string? WeatherDescription { get; set; }
 
         // Transparency rated 1-10 (1 = poor, 10 = excellent)
         [Range(1, 10)]
