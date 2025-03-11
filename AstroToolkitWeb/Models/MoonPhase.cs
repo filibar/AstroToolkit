@@ -33,7 +33,7 @@ namespace AstroToolkitWeb.Models
 
         // Diameter in arc minutes
         public double? AngularDiameter { get; set; }
-        
+
         // Get resource name for the appropriate moon phase icon
         public string GetPhaseIconResource()
         {

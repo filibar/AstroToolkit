@@ -1,27 +1,62 @@
 
 @namespace AstroToolkitWeb.Pages.Components
-@using AstroToolkitWeb.Models
 
-@if (Phase != null)
-{
-    <div class="moon-phase-icon" title="@Phase.PhaseName">
-        <img src="@GetMoonPhaseIconPath()" alt="@Phase.PhaseName" width="@Size" height="@Size" />
-    </div>
-}
+<div class="moon-phase-icon">
+    <img src="@GetMoonPhaseIconPath()" alt="@PhaseName" title="@PhaseName" width="@Width" height="@Height" />
+</div>
 
 @code {
     [Parameter]
-    public MoonPhase? Phase { get; set; }
+    public string? PhaseName { get; set; }
 
     [Parameter]
-    public int Size { get; set; } = 32;
+    public double Illumination { get; set; }
+
+    [Parameter]
+    public int PhaseType { get; set; }
+
+    [Parameter]
+    public int Width { get; set; } = 50;
+
+    [Parameter]
+    public int Height { get; set; } = 50;
 
     private string GetMoonPhaseIconPath()
     {
-        if (Phase == null)
-            return "images/moon/placeholder.svg";
-            
-        return $"images/moon/{Phase.GetPhaseIconResource().Replace('_', '-')}.svg";
+        string iconPath;
+
+        switch (PhaseType)
+        {
+            case 0:
+                iconPath = "images/moon/new-moon.svg";
+                break;
+            case 1:
+                iconPath = "images/moon/waxing-crescent.svg";
+                break;
+            case 2:
+                iconPath = "images/moon/first-quarter.svg";
+                break;
+            case 3:
+                iconPath = "images/moon/waxing-gibbous.svg";
+                break;
+            case 4:
+                iconPath = "images/moon/full-moon.svg";
+                break;
+            case 5:
+                iconPath = "images/moon/waning-gibbous.svg";
+                break;
+            case 6:
+                iconPath = "images/moon/last-quarter.svg";
+                break;
+            case 7:
+                iconPath = "images/moon/waning-crescent.svg";
+                break;
+            default:
+                iconPath = "images/moon/placeholder.svg";
+                break;
+        }
+
+        return iconPath;
     }
 }
 

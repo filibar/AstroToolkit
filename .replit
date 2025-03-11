@@ -4,7 +4,7 @@ modules = ["dotnet", "nodejs-20", "python-3.11"]
 channel = "stable-24_05"
 
 [workflows]
-runButton = "webapp"
+runButton = "Project"
 
 [[workflows.workflow]]
 name = "Project"
@@ -27,7 +27,7 @@ task = "packager.installForAll"
 
 [[workflows.workflow.tasks]]
 task = "shell.exec"
-args = "cd AstroToolkitWeb && dotnet run --urls 'http://0.0.0.0:5000'"
+args = "cd AstroToolkitWeb && dotnet run --urls \"http://0.0.0.0:5000\""
 waitForPort = 5000
 
 [deployment]

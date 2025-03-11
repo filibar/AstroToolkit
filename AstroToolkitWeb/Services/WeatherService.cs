@@ -249,15 +249,7 @@ namespace AstroToolkitWeb.Services
                 ForecastTime = DateTime.UtcNow,
                 WeatherDescription = weatherDescription,
                 IconCode = GetWeatherIconCode(cloudCoverage),
-                // Assign the moon phase object, not trying to convert to double
-                // This needs a proper implementation depending on your data model
-                MoonPhase = new Models.MoonPhase
-                {
-                    Date = date,
-                    Illumination = (int)(moonPhase.Illumination * 100),
-                    PhaseType = moonPhase.PhaseType,
-                    DaysSinceNewMoon = moonPhase.DaysSinceNewMoon
-                },
+                MoonPhase = moonPhase,
                 SunriseTime = sunriseTime,
                 SunsetTime = sunsetTime
             };
