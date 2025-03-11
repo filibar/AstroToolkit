@@ -48,6 +48,25 @@ namespace AstroToolkitWeb.Models
         // Astronomy viewing score (0-100)
         [Range(0, 100)]
         public int? AstronomyViewingScore { get; set; }
+        
+        // Weather description (Clear, Cloudy, etc.)
+        public string? WeatherDescription { get; set; }
+        
+        // Astronomy rating (1-10)
+        [Range(1, 10)]
+        public int? AstroRating { get; set; }
+        
+        // Forecast time
+        public DateTime ForecastTime { get; set; } = DateTime.UtcNow;
+        
+        // Sunrise time
+        public DateTime? SunriseTime { get; set; }
+        
+        // Sunset time
+        public DateTime? SunsetTime { get; set; }
+        
+        // Moon phase information
+        public MoonPhase? MoonPhase { get; set; }
 
         // Seeing conditions rated 1-10 (1 = poor, 10 = excellent)
         [Range(1, 10)]
