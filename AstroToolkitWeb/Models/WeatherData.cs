@@ -1,3 +1,4 @@
+
 using System.ComponentModel.DataAnnotations;
 
 namespace AstroToolkitWeb.Models
@@ -44,6 +45,10 @@ namespace AstroToolkitWeb.Models
         // Precipitation amount in mm
         public double? Precipitation { get; set; }
 
+        // Astronomy viewing score (0-100)
+        [Range(0, 100)]
+        public int? AstronomyViewingScore { get; set; }
+
         // Seeing conditions rated 1-10 (1 = poor, 10 = excellent)
         [Range(1, 10)]
         public int? SeeingIndex { get; set; }
@@ -53,33 +58,37 @@ namespace AstroToolkitWeb.Models
         
         // Icon code for weather API
         public string? IconCode { get; set; }
-        
-        // Weather description
-        public string? WeatherDescription { get; set; }
 
         // Transparency rated 1-10 (1 = poor, 10 = excellent)
         [Range(1, 10)]
         public int? TransparencyIndex { get; set; }
         
-        // Icon code for weather condition visualization
-        public string? IconCode { get; set; }
-
-        // Overall rating for astrophotography (1-10)
+        // Weather stability rating (1-10)
         [Range(1, 10)]
-        public int? AstroRating { get; set; }
+        public int? StabilityIndex { get; set; }
         
-        // Astronomy viewing score (0-100)
+        // Light pollution level (Bortle scale 1-9)
+        [Range(1, 9)]
+        public int? LightPollutionIndex { get; set; }
+        
+        // Sunrise time
+        public DateTime? Sunrise { get; set; }
+        
+        // Sunset time
+        public DateTime? Sunset { get; set; }
+        
+        // Moon illumination percentage (0-100)
         [Range(0, 100)]
-        public int AstronomyViewingScore { get; set; } = 0;
-
-        public DateTime ForecastTime { get; set; } = DateTime.UtcNow;
+        public double? MoonIllumination { get; set; }
         
-        public DateTime? SunriseTime { get; set; }
+        // Moon phase (0-1 for new to full)
+        [Range(0, 1)]
+        public double? MoonPhase { get; set; }
         
-        public DateTime? SunsetTime { get; set; }
-
-        public string? WeatherDescription { get; set; }
-
-        public MoonPhase? MoonPhase { get; set; }
+        // Moon rise time
+        public DateTime? MoonRise { get; set; }
+        
+        // Moon set time
+        public DateTime? MoonSet { get; set; }
     }
 }
